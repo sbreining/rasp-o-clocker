@@ -17,15 +17,21 @@ class Database:
     -------
     is_holiday(month, day)
         Checks if the provided month and day is a holiday.
-
-    write_holidays(holidays)
-        Writes a list of holidays to the Database.
     """
     def __init__(self, config):
+        """
+        Creates a new instance of the Database object.
+
+        Parameters
+        ----------
+        config : Config
+            Configuration object that loaded the .env file.
+        """
         self._db = sqlite3.connect(config.get_db_path(), check_same_thread=False)
 
     def is_holiday(self, month, day):
-        """Checks if the day and month combination is a holiday.
+        """
+        Checks if the day and month combination is a holiday.
 
         Parameters
         ----------
@@ -34,6 +40,11 @@ class Database:
         
         day : str, required
             The day of the month.
+
+        Return
+        ----------
+        bool
+            True if day is a holiday.
         """
         print('Checking if holiday')
         cursor = self._db.cursor()
@@ -46,26 +57,3 @@ class Database:
         data = cursor.fetchall()
 
         return len(data) != 0
-
-    def write_holidays(self, holidays):
-        """Writes the holidays to the DB for the year.
-
-        Parameters
-        ----------
-        holidays : array, required
-            An array of tuples in the format; (month, day,)
-        """
-        cursor = self._db.cursor()
-
-        # Remove all data from the table then;
-        delete_sql = 'DELETE FROM holidays'
-        cursor.execute(delete_sql)
-
-        # Write all the new holidays retrieved from the PDF.
-        insert_sql = 'INSERT INTO holidays(month, day) VALUES(?, ?);'
-        cursor.executemany(insert_sql, holidays)
-
-        # Commit changes to DB.
-        self._db.commit()
-
-        return
