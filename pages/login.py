@@ -3,11 +3,46 @@ from selenium.webdriver.common.keys import Keys
 
 
 class Login:
+    """A class to handle the responsibility of the login page for Paylocity.
+
+    Attributes
+    ----------
+    _config : Config
+        This holds onto the .env configuration
+
+    _driver : WebDriver
+        This is the instance of the web driver used to navigate.
+
+    Methods
+    -------
+    login()
+        Enter the credentials into the needed fields and login.
+    """
+
     def __init__(self, config, driver):
+        """
+        Creates a new instance of the PaidTimeOff page object.
+
+        Parameters
+        ----------
+        config : Config
+            The config object holding .env values for logging in.
+
+        driver : WebDriver
+            The chrome driver used to navigate around the browser.
+        """
         self._config = config
         self._driver = driver
 
     def login(self):
+        """
+        Locates text boxes for credentials and sends keys to login.
+
+        Return
+        ----------
+        Question
+            The Question page object in case we landed there.
+        """
         payload = self._config.get_login()
 
         self._driver.get(self._config.get_login_url())
