@@ -37,7 +37,14 @@ class Config:
         load_dotenv(dotenv_path)
 
     def get_login(self):
-        """Returns login information; company ID, login and password."""
+        """
+        Returns login information; company ID, login and password.
+
+        Return
+        -------
+        Dictionary
+            Get login information using keys: companyId, username, and password.
+        """
         return {
             'companyId': getenv('COMPANY_CODE'),
             'username': getenv('USERNAME'),
@@ -45,23 +52,54 @@ class Config:
         }
 
     def get_login_url(self):
-        """Returns the url in string form for where to log in."""
+        """
+        Returns the url in string form for where to log in.
+
+        Return
+        -------
+        string
+        """
         return getenv('PAYLOCITY_LOGIN_URL')
 
     def get_dashboard_url(self):
-        """Returns the url for the dashboard page."""
+        """
+        Returns the url for the dashboard page.
+
+        Return
+        -------
+        string
+        """
         return getenv('PAYLOCITY_BASE_URL')
 
     def get_implicit_wait(self):
-        """Returns the max time (seconds) selenium waits for page load."""
+        """
+        Returns the max time (seconds) selenium waits for page load.
+
+        Return
+        -------
+        int
+        """
         return getenv('IMPLICIT_WAIT')
 
     def get_db_path(self):
-        """Returns path to the database, this relative to this file."""
+        """
+        Returns path to the database, this relative to this file.
+
+        Return
+        -------
+        string
+        """
         return join(dirname(__file__), '../data/database.db')
     
     def get_questions(self):
-        """Returns secret questions-answers as key-value pairs in dictionary"""
+        """
+        Returns secret questions-answers as key-value pairs in dictionary.
+
+        Return
+        -------
+        Dictionary
+            Use the secret questions as keys to get the secret answers.
+        """
         return {
             getenv('SECRET_Q_1'): getenv('SECRET_A_1'),
             getenv('SECRET_Q_2'): getenv('SECRET_A_2'),
