@@ -44,11 +44,11 @@ class PunchCardManager(Thread):
                self._db.is_holiday(now.month, now.day) or \
                self._is_pto_day(dashboard_page, now):
                 print('It is a weekend, holiday, or PTO day, skipping!')
-                # TODO Uncomment when top level is loop: break
+                # TODO Uncomment when top level is loop: continue
             else:
                 print('It is not a weekend, holiday, or PTO day.')
 
-            if now.hour == 7:
+            if is_clock_out_punched and now.hour == 7:
                 if 0 < now.minute <= 24:
                     # TODO Put these times in the database.
                     clock_out_hour = now.hour + 8
@@ -56,7 +56,7 @@ class PunchCardManager(Thread):
                     is_clock_out_punched = False
                     print('Clocking in for the day.')
                     dashboard_page.clock_in()
-            elif now.hour == 12:
+            elif is_end_lunch_punched and now.hour == 12:
                 if 0 < now.minute <= 23:
                     end_lunch = now.minute + 31
                     is_end_lunch_punched = False
