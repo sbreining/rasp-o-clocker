@@ -1,4 +1,5 @@
 from .dashboard import Dashboard
+from selenium.webdriver.common.keys import Keys
 
 
 class Question:
@@ -32,10 +33,10 @@ class Question:
         """Answers the secret question to continue to the Dashboard."""
 
         # Step 1: Figure out what the question is.
-        secret_question = self._driver.find_element_by_id('some_id').text
+        secret_question = self._driver.find_element_by_xpath('//label[@for="ChallengeAnswer"]').text
 
         # Step 2: Enter text into box.
-        answer_box = self._driver.find_element_by_id('answer_id')
+        answer_box = self._driver.find_element_by_id('ChallengeAnswer')
         answer_box.send_keys(self._config.get_questions()[secret_question])
 
         # Step 3: Hit enter

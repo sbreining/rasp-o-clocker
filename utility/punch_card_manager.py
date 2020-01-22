@@ -35,7 +35,7 @@ class PunchCardManager(Thread):
 
             if now.weekday() > 5 or self._db.is_holiday(now.month, now.day):
                 print('It is a weekend or Holiday, skipping!')
-                break
+                # TODO Uncomment when top level is loop: break
             else:
                 print('It is not a weekend or holiday.')
 
