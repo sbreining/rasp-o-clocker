@@ -1,6 +1,8 @@
 from datetime import datetime
 from threading import Thread
 import pages
+import random
+import time
 
 
 class PunchCardManager(Thread):
@@ -12,6 +14,11 @@ class PunchCardManager(Thread):
         self._db = args['database']
 
     def run(self):
+        clock_out_hour = 0
+        clock_out_minute = 0
+        end_lunch = 0
+        is_end_lunch_punched = True
+        is_clock_out_punched = True
         # TODO Make this a while loop to keep it running
         if True:
             # TODO Handle the times at which I need to log in.
@@ -33,19 +40,42 @@ class PunchCardManager(Thread):
 
             now = datetime.now()
 
-            if now.weekday() > 5 or self._db.is_holiday(now.month, now.day):
-                print('It is a weekend or Holiday, skipping!')
+            if now.weekday() > 5 or \
+               self._db.is_holiday(now.month, now.day) or \
+               self._is_pto_day(dashboard_page, now):
+                print('It is a weekend, holiday, or PTO day, skipping!')
                 # TODO Uncomment when top level is loop: break
             else:
-                print('It is not a weekend or holiday.')
+                print('It is not a weekend, holiday, or PTO day.')
 
-            punch_command = ''
-            if now.hour == 8:
-                if 0 < now.minute <= 30:
-                    punch_command = 'in'
+            if now.hour == 7:
+                if 0 < now.minute <= 24:
+                    # TODO Put these times in the database.
+                    clock_out_hour = now.hour + 8
+                    clock_out_minute = now.minute + random.randrange(33,35)
+                    is_clock_out_punched = False
+                    print('Clocking in for the day.')
+                    dashboard_page.clock_in()
             elif now.hour == 12:
-                if 0 < now.minute <= 30:
-                    punch_command = 'sl'  # Start Lunch
-                    # Need to figure out how to do lunch 31-35 minutes later.
+                if 0 < now.minute <= 23:
+                    end_lunch = now.minute + 31
+                    is_end_lunch_punched = False
+                    print('Starting lunch.')
+                    dashboard_page.start_lunch()
+            elif not is_end_lunch_punched and now.hour == 12:
+                if now.minute > end_lunch:
+                    is_end_lunch_punched = True
+                    print('Lunch is over.')
+                    dashboard_page.end_lunch()
+            elif not is_clock_out_punched and now.hour > clock_out_hour:
+                if now.minute > clock_out_minute:
+                    is_clock_out_punched = True
+                    print('Clocking out for the day.')
+                    dashboard_page.clock_out()
 
-            # TODO Uncomment this: break
+            time.sleep(60)
+
+    def _is_pto_day(self, dashboard, date):
+        pto = dashboard.go_to_pto()
+
+        return pto.is_pto_day(date)

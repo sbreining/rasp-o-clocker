@@ -22,7 +22,7 @@ class Dashboard:
         self._click_and_quit(clock_out_element)
 
     def go_to_pto(self):
-        self._driver.find_element_by_name('SOME PTO IDENTIFIER').click()
+        self._driver.find_element_by_xpath('//a[text()="Launch Time & Attendance"]').click()
         return pto.PaidTimeOff(self._driver)
 
     def _click_and_quit(self, element):

@@ -25,6 +25,9 @@ class Config:
 
     get_db_path()
         Returns path to the database, this relative to this file.
+
+    get_questions()
+        Returns the secret questions as key-value pairs in a python dictionary.
     """
     def __init__(self):
         # Create .env file path.
@@ -58,6 +61,7 @@ class Config:
         return join(dirname(__file__), '../data/database.db')
     
     def get_questions(self):
+        """Returns secret questions-answers as key-value pairs in dictionary"""
         return {
             getenv('SECRET_Q_1'): getenv('SECRET_A_1'),
             getenv('SECRET_Q_2'): getenv('SECRET_A_2'),
