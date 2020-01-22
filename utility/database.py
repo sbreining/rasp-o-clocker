@@ -18,6 +18,7 @@ class Database:
     is_holiday(month, day)
         Checks if the provided month and day is a holiday.
     """
+
     def __init__(self, config):
         """
         Creates a new instance of the Database object.
