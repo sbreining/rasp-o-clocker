@@ -41,7 +41,7 @@ class PunchCardManager(Thread):
             now = datetime.now()
 
             if now.weekday() > 5 or \
-               self._db.is_holiday(now.month, now.day, now.year) or \
+               self._db.is_holiday(now) or \
                self._is_pto_day(dashboard_page, now):
                 print('It is a weekend, holiday, or PTO day, skipping!')
                 # TODO Uncomment when top level is loop: continue
