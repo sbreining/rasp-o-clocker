@@ -1,5 +1,6 @@
 from datetime import datetime
 from threading import Thread
+from utility.models.holiday import Holiday
 import pages
 import random
 import time
@@ -12,6 +13,8 @@ class PunchCardManager(Thread):
         self._config = args['config']
         self._driver = args['driver']
         self._db = args['database']
+
+        self._holiday = Holiday(self._db.get_cursor())
 
     def run(self):
         clock_out_hour = 0
@@ -41,7 +44,7 @@ class PunchCardManager(Thread):
             now = datetime.now()
 
             if now.weekday() > 5 or \
-               self._db.is_holiday(now) or \
+               self._holiday.is_holiday(now) or \
                self._is_pto_day(dashboard_page, now):
                 print('It is a weekend, holiday, or PTO day, skipping!')
                 # TODO Uncomment when top level is loop: continue

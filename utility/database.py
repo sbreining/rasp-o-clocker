@@ -15,8 +15,8 @@ class Database:
 
     Methods
     -------
-    is_holiday(month, day)
-        Checks if the provided month and day is a holiday.
+    get_cursor()
+        Returns the cursor with the connection to the database.
     """
 
     def __init__(self, config):
@@ -29,27 +29,7 @@ class Database:
             Configuration object that loaded the .env file.
         """
         self._db = sqlite3.connect(config.get_db_path(), check_same_thread=False)
-
-    def is_holiday(self, date):
-        """
-        Checks if the month-day-year combination is a holiday.
-
-        Parameters
-        ----------
-        date : datetime, required
-            The date to check against the database to see if it is a holiday.
-
-        Return
-        ----------
-        bool
-            True if day is a holiday.
-        """
-        cursor = self._db.cursor()
-
-        sql = 'SELECT * FROM holidays WHERE month=? AND day=? AND year=?;'
-        data = (month_name[date.month], date.day, date.year,)
-        cursor.execute(sql, data)
-
-        data = cursor.fetchall()
-
-        return len(data) != 0
+        self.cursor = self._db.cursor()
+    
+    def get_cursor():
+        return self.cursor
