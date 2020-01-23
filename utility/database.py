@@ -30,17 +30,20 @@ class Database:
         """
         self._db = sqlite3.connect(config.get_db_path(), check_same_thread=False)
 
-    def is_holiday(self, month, day):
+    def is_holiday(self, month, day, year):
         """
-        Checks if the day and month combination is a holiday.
+        Checks if the month-day-year combination is a holiday.
 
         Parameters
         ----------
         month : str, required
             The name of the month to be checked, in string form.
         
-        day : str, required
+        day : int, required
             The day of the month.
+        
+        year : int, required
+            The year to check against the holiday
 
         Return
         ----------
@@ -52,8 +55,8 @@ class Database:
 
         # Set query statement
         cursor.execute(
-            'SELECT * FROM holidays WHERE month=? AND day=?;',
-            (month_name[month], day,)
+            'SELECT * FROM holidays WHERE month=? AND day=? AND year=?;',
+            (month_name[month], day, year,)
         )
         data = cursor.fetchall()
 
