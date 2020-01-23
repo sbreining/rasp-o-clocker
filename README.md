@@ -32,6 +32,7 @@ raspberry pi, hence the name `Rasp-O-Clocker`.
 - Implement the punches to be recorded in the database.
 - Use clock times from the `.env` so it is more customizable.
 - Consider ORM, but may be overkill.
+  - If not ORM, at least create the models to handle each table separately.
 
 ### Copyright
 
