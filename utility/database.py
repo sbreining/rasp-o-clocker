@@ -10,6 +10,9 @@ class Database:
 
     Attributes
     ----------
+    _cursor : Cursor
+        The cursor for the database.
+
     _db : Connection
         A connection to the Database
 
@@ -29,7 +32,16 @@ class Database:
             Configuration object that loaded the .env file.
         """
         self._db = sqlite3.connect(config.get_db_path(), check_same_thread=False)
-        self.cursor = self._db.cursor()
+        self._cursor = self._db.cursor()
     
-    def get_cursor():
-        return self.cursor
+    def commit(self):
+        self._db.commit()
+
+    def execute(self, sql, data):
+        self._cursor.execute(sql, data)
+
+    def fetchall(self):
+        return self._cursor.fetchall()
+    
+    def get_last_row_id(self):
+        return self._cursor.lastrowid

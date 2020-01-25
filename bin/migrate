@@ -27,13 +27,13 @@ print('Creating holiday table')
 
 add_example_holidays = True
 try:
-  cursor.execute('CREATE TABLE holidays ([month] TEXT NOT NULL, [day] INTEGER NOT NULL, [year] INTEGER NOT NULL, PRIMARY KEY(month, day, year))')
+  cursor.execute('CREATE TABLE holidays ([id] INTEGER PRIMARY KEY, [month] TEXT NOT NULL, [day] INTEGER NOT NULL, [year] INTEGER NOT NULL,  UNIQUE(month, day, year))')
 except sqlite3.OperationalError:
   add_example_holidays = False
   print('Table holidays already exists')
 
 if add_example_holidays:
-  print('Holiday table created, or already exists, loading sample holidays')
+  print('Holiday table created, loading sample holidays')
   sample_holidays = [('January', 1, 2020), ('July', 4, 2020), ('December', 25, 2020)]
   cursor.executemany('INSERT INTO holidays(month, day, year) VALUES(?, ?, ?)', sample_holidays)
   print('Example holidays added')

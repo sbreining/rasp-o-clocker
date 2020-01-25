@@ -1,7 +1,6 @@
-from config.config import Config
+from config import Config
 from selenium.webdriver import Chrome
-from utility.punch_card_manager import PunchCardManager
-from utility.database import Database
+from utility import Database, PunchCardManager
 
 
 def main():

@@ -1,6 +1,6 @@
 from datetime import datetime
 from threading import Thread
-from utility.models.holiday import Holiday
+from utility.models import *
 import pages
 import random
 import time
@@ -14,7 +14,8 @@ class PunchCardManager(Thread):
         self._driver = args['driver']
         self._db = args['database']
 
-        self._holiday = Holiday(self._db.get_cursor())
+        self._holiday = Holiday(self._db)
+        self._punch = Punch(self._db)
 
     def run(self):
         clock_out_hour = 0
