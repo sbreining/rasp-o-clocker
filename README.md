@@ -33,6 +33,7 @@ raspberry pi, hence the name `Rasp-O-Clocker`.
 - Use clock times from the `.env` so it is more customizable.
 - Consider ORM, but may be overkill.
   - If not ORM, at least create the models to handle each table separately.
+- Add `smtplib` to handle text message alerts with a Gmail account.
 
 ### Copyright
 

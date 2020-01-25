@@ -28,6 +28,9 @@ class Config:
 
     get_questions()
         Returns the secret questions as key-value pairs in a python dictionary.
+    
+    get_pager_duty_info()
+        Returns the information needed for PagerDuty
     """
     def __init__(self):
         # Create .env file path.
@@ -104,4 +107,19 @@ class Config:
             getenv('SECRET_Q_1'): getenv('SECRET_A_1'),
             getenv('SECRET_Q_2'): getenv('SECRET_A_2'),
             getenv('SECRET_Q_3'): getenv('SECRET_A_3')
+        }
+    
+    def get_pager_duty_info(self):
+        """
+        Returns information necessary for PagerDuty
+
+        Return
+        -------
+        Dictionary
+            Contains the information to login to the e-mail service for alerts.
+        """
+        return {
+            'from': getenv('EMAIL_ADDRESS'),
+            'password': getenv('EMAIL_PASSWORD'),
+            'to': getenv('SMS_GATEWAY')
         }
