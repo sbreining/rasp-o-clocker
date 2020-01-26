@@ -5,18 +5,18 @@ from os.path import join, dirname, exists
 path = '../data'
 
 try:
-  os.mkdir(join(dirname(__file__), path))
+    os.mkdir(join(dirname(__file__), path))
 except OSError:
-  print('Creation of the directory %s failed, may already exist' % path)
+    print('Creation of the directory %s failed, may already exist' % path)
 else:
-  print('Successfully made the directory %s ' % path)
+    print('Successfully made the directory %s ' % path)
 
 print('Creating schema')
 
 if exists(join(dirname(__file__), path, 'database.db')):
-  print('Connecting to existing database')
+    print('Connecting to existing database')
 else:
-  print('Creating database file and connecting to database')
+    print('Creating database file and connecting to database')
 connection = sqlite3.connect(join(dirname(__file__), path, 'database.db'))
 print('Finished connecting')
 
@@ -27,25 +27,52 @@ print('Creating holiday table')
 
 add_example_holidays = True
 try:
-  cursor.execute('CREATE TABLE holidays ([id] INTEGER PRIMARY KEY, [month] TEXT NOT NULL, [day] INTEGER NOT NULL, [year] INTEGER NOT NULL,  UNIQUE(month, day, year))')
+    cursor.execute(
+        '''
+        CREATE TABLE holidays(
+            [id] INTEGER PRIMARY KEY,
+            [month] TEXT NOT NULL,
+            [day] INTEGER NOT NULL,
+            [year] INTEGER NOT NULL,
+            UNIQUE(month, day, year)
+        )
+        '''
+    )
 except sqlite3.OperationalError:
-  add_example_holidays = False
-  print('Table holidays already exists')
+    add_example_holidays = False
+    print('Table holidays already exists')
 
 if add_example_holidays:
-  print('Holiday table created, loading sample holidays')
-  sample_holidays = [('January', 1, 2020), ('July', 4, 2020), ('December', 25, 2020)]
-  cursor.executemany('INSERT INTO holidays(month, day, year) VALUES(?, ?, ?)', sample_holidays)
-  print('Example holidays added')
+    print('Holiday table created, loading sample holidays')
+    sample_holidays = [
+        ('January', 1, 2020),
+        ('July', 4, 2020),
+        ('December', 25, 2020)
+    ]
+    cursor.executemany(
+        'INSERT INTO holidays(month, day, year) VALUES(?, ?, ?)',
+        sample_holidays
+    )
+    print('Example holidays added')
 else:
-  print('Because holidays already exists, not going to add sample holidays')
+    print(
+        'Because holidays already exists, not going to add sample holidays'
+    )
 
 print('Creating punch tracking table')
 
 try:
-  cursor.execute('CREATE TABLE punches([id] INTEGER PRIMARY KEY, [clock_in] DATETIME NULLABLE, [lunch_start] DATETIME NULLABLE)')
+    cursor.execute(
+        '''
+        CREATE TABLE punches(
+            [id] INTEGER PRIMARY KEY,
+            [clock_in] DATETIME NULLABLE,
+            [lunch_start] DATETIME NULLABLE
+        )
+        '''
+    )
 except sqlite3.OperationalError:
-  print('Table punches already exists.')
+    print('Table punches already exists.')
 
 print('Tracking table added')
 
