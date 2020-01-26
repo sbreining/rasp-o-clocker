@@ -3,8 +3,8 @@ class Punch:
 
     Attributes
     ----------
-    _cursor : Cursor
-        A connection to the Database
+    _connection : Database
+        A connection to the Database.
 
     Methods
     -------
@@ -16,9 +16,7 @@ class Punch:
 
         Parameters
         ----------
-        config : Config, required
-            Holds on to database connection credentials.
+        connection : Database, required
+            Holds on to database connection.
         """
         self._connection = connection
-
-    

@@ -1,6 +1,6 @@
 from config import Config
 from selenium.webdriver import Chrome
-from utility import Database, PunchCardManager
+from utility import Database, PagerDuty, PunchCardManager
 
 
 def main():
@@ -14,11 +14,14 @@ def main():
     driver = Chrome()
     driver.implicitly_wait(config.get_implicit_wait())
 
-    # Set the args and driver in a dictionary for future use
-    args = {'config': config, 'driver': driver, 'database': db}
+    # Instantiate the pager
+    pager = PagerDuty(config)
+
+    # Set the args in a dictionary for future use
+    args = {'config': config, 'database': db, 'driver': driver, 'pager': pager}
 
     # Start the process manager
-    punch_card_manager = PunchCardManager(args=args)
+    punch_card_manager = PunchCardManager(args)
     punch_card_manager.start()
 
 

@@ -1,23 +1,21 @@
 from datetime import datetime
-from threading import Thread
 from utility.models import *
 import pages
 import random
 import time
 
 
-class PunchCardManager(Thread):
-    def __init__(self, group=None, target=None, name=None, args=None):
-        super().__init__(group=group, target=target, name=name)
-
+class PunchCardManager:
+    def __init__(self, args):
         self._config = args['config']
-        self._driver = args['driver']
         self._db = args['database']
+        self._driver = args['driver']
+        self._pager = args['pager']
 
         self._holiday = Holiday(self._db)
         self._punch = Punch(self._db)
 
-    def run(self):
+    def start(self):
         clock_out_hour = 0
         clock_out_minute = 0
         end_lunch = 0
@@ -56,8 +54,9 @@ class PunchCardManager(Thread):
                 if 0 < now.minute <= 24:
                     # TODO Put these times in the database.
                     clock_out_hour = now.hour + 8
-                    clock_out_minute = now.minute + random.randrange(33,35)
+                    clock_out_minute = now.minute + random.randrange(33, 35)
                     is_clock_out_punched = False
+                    # TODO Make this pager duty
                     print('Clocking in for the day.')
                     dashboard_page.clock_in()
             elif is_end_lunch_punched and now.hour == 12:

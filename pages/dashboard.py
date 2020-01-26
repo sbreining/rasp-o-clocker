@@ -79,7 +79,7 @@ class Dashboard:
         The only reason to navigate away from Paylocity is to simulate logging
         out of the service. It is unnecessary to close and re-open the web
         browser regularly. Further, it does not make sense to stay on the
-        Paylocity webpage, just to have it log use out due to expired session.
+        Paylocity web page, just to have it log use out due to expired session.
 
         Parameters
         -------

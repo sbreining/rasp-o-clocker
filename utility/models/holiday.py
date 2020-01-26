@@ -15,6 +15,9 @@ class Holiday:
     add_holiday(date)
         Adds the holiday to the database.
 
+    get_row_id_by_date(date)
+        Returns the row ID for the given date passed in.
+
     is_holiday(date)
         Determines if the given date is a holiday.
 
@@ -60,7 +63,19 @@ class Holiday:
         return self._connection.get_last_row_id()
     
     def get_row_id_by_date(self, date):
-        # TODO Add doc block comment on this
+        """
+        Finds the date in the database and returns the row ID.
+
+        Parameters
+        -------
+        date : datetime, required
+            The date time to be found in the database
+
+        Return
+        -------
+        int
+            The ID of the row for the holiday found, -1 on error or not found.
+        """
         sql = 'SELECT id FROM holidays WHERE month=? AND day=? AND year=?'
         data = (month_name[date.month], date.day, date.year,)
 
@@ -101,8 +116,8 @@ class Holiday:
 
         Parameters
         -------
-        date : datetime, required
-            The holiday wishing to be removed.
+        record_id : int, required
+            The ID of the row to be removed.
         
         Return
         -------

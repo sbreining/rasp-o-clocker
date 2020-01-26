@@ -1,5 +1,4 @@
 import sqlite3
-from calendar import month_name
 
 
 class Database:
@@ -20,6 +19,18 @@ class Database:
     -------
     get_cursor()
         Returns the cursor with the connection to the database.
+
+    commit()
+        Calls to commit the transaction.
+
+    execute(sql, data)
+        Executes the sequel.
+
+    fetchall()
+        After executing the sql, call fetch to get the models.
+
+    get_last_row_id()
+        On an insert, this will return the new row id if applicable.
     """
 
     def __init__(self, config):
@@ -35,13 +46,41 @@ class Database:
         self._cursor = self._db.cursor()
     
     def commit(self):
+        """Commits the database transactions."""
         self._db.commit()
 
-    def execute(self, sql, data):
+    def execute(self, sql, data=()):
+        """
+        Executes the provided sql statement with the given data.
+
+        Parameters
+        --------
+        sql : string, required
+            The query to be executed.
+
+        data : tuple, optional
+             The data to be inserted into the sql statement.
+        """
         self._cursor.execute(sql, data)
 
     def fetchall(self):
+        """
+        After executing the query, this will return the data.
+
+        Return
+        -------
+        list
+            The list of data returned from the query.
+        """
         return self._cursor.fetchall()
     
     def get_last_row_id(self):
+        """
+        Will return the last row id, generally used after an insert
+
+        Return
+        -------
+        int
+            The value of the last row inserted.
+        """
         return self._cursor.lastrowid

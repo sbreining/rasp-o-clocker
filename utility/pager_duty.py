@@ -15,12 +15,18 @@ class PagerDuty:
     _to : string
         The text number using e-mail that will receive the alert.
 
+    _server : SMTP_SSL
+        The e-mail server that will be connected to, for sending messages.
+
     Methods
     -------
     _page(level, message)
         Logs into e-mail, and sends message.
     
     alert(message)
+        Sends an alert level message when something goes wrong.
+
+    warning(message)
         Sends an alert level message when something goes wrong.
 
     info(message)
@@ -42,6 +48,8 @@ class PagerDuty:
         self._password = pager_duty_info['password']
         self._to = pager_duty_info['to']
 
+        self._server = SMTP_SSL('smtp.gmail.com', 465)
+
     def _page(self, level, message):
         """
         This method signs into the Google server, and send the text message
@@ -55,13 +63,12 @@ class PagerDuty:
         message: string, required
             The message to be sent which is the core of the information.
         """
-        server = SMTP_SSL('smtp.gmail.com', 465)
-        server.login(self._from.split('@')[0], self._password)
+        self._server.login(self._from.split('@')[0], self._password)
 
-        body = 'Level ' + level + '\nMessage ' + message
-        server.sendmail(self._from, self._to, body)
+        body = 'Level - ' + level + '\nMessage - ' + message
+        self._server.sendmail(self._from, self._to, body)
 
-        server.quit()
+        self._server.quit()
 
     def alert(self, message):
         """
@@ -73,6 +80,18 @@ class PagerDuty:
             The message to be sent which is the core of the information.
         """
         self._page('ALERT', message)
+
+    def warning(self, message):
+        """
+        Sends an WARNING message out for when things go wrong, but do
+        warrant immediate action.
+
+        Parameters
+        ----------
+        message: string, required
+            The message to be sent which is the core of the information.
+        """
+        self._page('WARNING', message)
 
     def info(self, message):
         """
