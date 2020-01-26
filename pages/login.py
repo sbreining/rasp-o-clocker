@@ -1,4 +1,4 @@
-from . import question
+from .question import Question
 from selenium.webdriver.common.keys import Keys
 
 
@@ -64,4 +64,4 @@ class Login:
         input_password.send_keys(Keys.RETURN)
 
         # Nine times out of 10, we should be on the dashboard.
-        return question.Question(self._config, self._driver)
+        return Question(self._config, self._driver)

@@ -29,12 +29,12 @@ class PunchCardManager:
             #   Restarts will not detract from that. And we can do some date math.
 
             # The sequence of steps below is contingent on the time.
-            login_page = pages.login.Login(self._config, self._driver)
+            login_page = pages.Login(self._config, self._driver)
             question_page = login_page.login()
 
             # The login might've gone straight to the dashboard
             if question_page.is_on_dashboard():
-                dashboard_page = pages.dashboard.Dashboard(self._driver)
+                dashboard_page = pages.Dashboard(self._driver)
                 print('We are on the dashboard')
             else:
                 dashboard_page = question_page.answer_question()

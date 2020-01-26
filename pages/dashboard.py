@@ -1,4 +1,4 @@
-from . import pto
+from .pto import PaidTimeOff
 
 
 class Dashboard:
@@ -71,7 +71,7 @@ class Dashboard:
             The PTO page object to handle finding PTO.
         """
         self._driver.find_element_by_xpath('//a[text()="Launch Time & Attendance"]').click()
-        return pto.PaidTimeOff(self._driver)
+        return PaidTimeOff(self._driver)
 
     def _click_and_nav_away(self, element):
         """Clicks on provided element and navigates away from Paylocity.
