@@ -67,7 +67,9 @@ try:
         CREATE TABLE punches(
             [id] INTEGER PRIMARY KEY,
             [clock_in] DATETIME NULLABLE,
-            [lunch_start] DATETIME NULLABLE
+            [lunch_start] DATETIME NULLABLE,
+            [lunch_end] DATETIME NULLABLE,
+            [clock_out] DATETIME NULLABLE
         )
         '''
     )
