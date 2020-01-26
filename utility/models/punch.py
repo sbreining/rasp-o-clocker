@@ -66,7 +66,7 @@ class Punch:
 
         results = self._connection.fetchall()
 
-        if not results:
+        if len(results) == 0:
             return ()
 
         return results[0]
