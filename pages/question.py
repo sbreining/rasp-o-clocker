@@ -52,7 +52,8 @@ class Question:
         """Answers the secret question to continue to the Dashboard."""
 
         # Step 1: Figure out what the question is.
-        secret_question = self._driver.find_element_by_xpath('//label[@for="ChallengeAnswer"]').text
+        path = '//label[@for="ChallengeAnswer"]'
+        secret_question = self._driver.find_element_by_xpath(path).text
 
         # Step 2: Enter text into box.
         answer_box = self._driver.find_element_by_id('ChallengeAnswer')

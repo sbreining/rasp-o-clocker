@@ -42,7 +42,10 @@ class Database:
         config : Config
             Configuration object that loaded the .env file.
         """
-        self._db = sqlite3.connect(config.get_db_path(), check_same_thread=False)
+        self._db = sqlite3.connect(
+            config.get_db_path(),
+            check_same_thread=False
+        )
         self._cursor = self._db.cursor()
     
     def commit(self):

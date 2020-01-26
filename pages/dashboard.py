@@ -70,7 +70,8 @@ class Dashboard:
         PaidTimeOff
             The PTO page object to handle finding PTO.
         """
-        self._driver.find_element_by_xpath('//a[text()="Launch Time & Attendance"]').click()
+        path = '//a[text()="Launch Time & Attendance"]'
+        self._driver.find_element_by_xpath(path).click()
         return PaidTimeOff(self._driver)
 
     def _click_and_nav_away(self, element):
