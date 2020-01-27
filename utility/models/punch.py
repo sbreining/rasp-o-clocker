@@ -99,10 +99,76 @@ class Punch:
         return True
 
     def start(self, datetime):
-        pass
+        """
+        Will update the row for the time that lunch started.
+
+        Parameters
+        ----------
+        datetime : datetime, required
+            The datetime to record the start of lunch.
+
+        Returns
+        -------
+        bool
+            True on successful update.
+        """
+        sql = 'UPDATE punches SET lunch_start=? WHERE id=?'
+        data = (datetime, self._id)
+
+        try:
+            self._connection.execute(sql, data)
+            self._connection.commit()
+        except sqlite3.OperationalError:
+            return False
+
+        return True
 
     def end(self, datetime):
-        pass
+        """
+        Will update the row for the time that lunch ended.
+
+        Parameters
+        ----------
+        datetime : datetime, required
+            The datetime to record the end of lunch.
+
+        Returns
+        -------
+        bool
+            True on successful update.
+        """
+        sql = 'UPDATE punches SET lunch_end=? WHERE id=?'
+        data = (datetime, self._id)
+
+        try:
+            self._connection.execute(sql, data)
+            self._connection.commit()
+        except sqlite3.OperationalError:
+            return False
+
+        return True
 
     def out(self, datetime):
-        pass
+        """
+        Will update the row for the time that the day ended.
+
+        Parameters
+        ----------
+        datetime : datetime, required
+            The datetime to record the day is done.
+
+        Returns
+        -------
+        bool
+            True on successful update.
+        """
+        sql = 'UPDATE punches SET clock_out=? WHERE id=?'
+        data = (datetime, self._id)
+
+        try:
+            self._connection.execute(sql, data)
+            self._connection.commit()
+        except sqlite3.OperationalError:
+            return False
+
+        return True

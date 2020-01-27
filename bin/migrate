@@ -46,7 +46,14 @@ if add_example_holidays:
     print('Holiday table created, loading sample holidays')
     sample_holidays = [
         ('January', 1, 2020),
-        ('July', 4, 2020),
+        ('January', 20, 2020),
+        ('February', 17, 2020),
+        ('May', 25, 2020),
+        ('July', 3, 2020),
+        ('September', 7, 2020),
+        ('November', 11, 2020),
+        ('November', 26, 2020),
+        ('November', 27, 2020),
         ('December', 25, 2020)
     ]
     cursor.executemany(
