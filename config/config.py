@@ -123,3 +123,14 @@ class Config:
             'password': getenv('EMAIL_PASSWORD'),
             'to': getenv('SMS_GATEWAY')
         }
+    
+    def get_start_hour(self):
+        """
+        Returns the hour at which to start work.
+
+        Return
+        ------
+        int
+            The hour (based on 24 hour clock) to start work.
+        """
+        return int(getenv('STARTING_HOUR'))

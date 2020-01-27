@@ -16,7 +16,7 @@ own project, and automating a redundant task.
 
 After the migration is run, 10 holidays will be in the `holidays` table that
 are based on my current work place's holidays for the year of 2020. Anything
-that needs to be adjust, added, or otherwise is up to you.
+that needs to be adjusted, added, or otherwise is up to you.
 
 ### Usage
 
@@ -25,14 +25,6 @@ that needs to be adjust, added, or otherwise is up to you.
 The idea is to run this with a process manager (like `supervisord`) to ensure it
 stays running on hardware that can stay active. My intended device was a
 raspberry pi, hence the name `Rasp-O-Clocker`.
-
-### Intended Features
-
-- Implement the punches to be recorded in the database.
-- Use clock times from the `.env` so it is more customizable.
-- Consider ORM, but may be overkill.
-  - If not ORM, at least create the models to handle each table separately.
-- Add `smtplib` to handle text message alerts with a Gmail account.
 
 ### Copyright
 

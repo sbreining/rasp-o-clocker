@@ -11,6 +11,7 @@ class PunchCardManager:
         self._driver = args['driver']
         self._pager = args['pager']
 
+        self._start_hour = self._config.get_start_hour()
         self._holiday = Holiday(args['database'])
         self._punch = Punch(args['database'])
 
@@ -26,7 +27,7 @@ class PunchCardManager:
                 continue
 
             punch_id = self._punch.get_id()
-            if punch_id == 0 and now.hour == 7:
+            if punch_id == 0 and now.hour == self._start_hour:
                 self._perform_action(dashboard_page.clock_in, 'Clock In', now, self._punch.in_)
             elif now - self._get_punch(punch_id, 1) > timedelta(hours=4, minutes=randint(1, 30)):
                 self._perform_action(dashboard_page.start_lunch, 'Start Lunch', now, self._punch.start)
