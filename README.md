@@ -14,10 +14,9 @@ own project, and automating a redundant task.
 5. Fill in any necessary information in the `.env` file you just created.
 6. Run migration: `python bin/migrate`
 
-After the migration is run, a few days of the year will be added to the 
-`holidays` table (January 1st, July 4th, and December 25th). If there are more
-holidays you or your company wishes to observe, you'll need to add them
-yourself.
+After the migration is run, 10 holidays will be in the `holidays` table that
+are based on my current work place's holidays for the year of 2020. Anything
+that needs to be adjust, added, or otherwise is up to you.
 
 ### Usage
 

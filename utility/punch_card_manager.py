@@ -1,5 +1,6 @@
-from datetime import datetime
+from datetime import datetime, timedelta
 from utility.models import *
+from random import randint
 import pages
 import time
 
@@ -20,25 +21,21 @@ class PunchCardManager:
             now = datetime.now()
 
             if not self._is_clock_in_day(now, dashboard_page):
+                # If it is not a day to clock in, sleep for greater intervals.
+                time.sleep(300)
                 continue
 
-            # TODO Need to utilize database.
-            if self._punch.get_id() == 0 and now.hour == 7 and 0 < now.minute <= 24:
-                self._clock_in(dashboard_page, now)
-            elif now.hour == 12 and 0 < now.minute <= 23:
-                self._start_lunch(dashboard_page, now)
-            elif now.hour == 12 and now.minute >= 54:
-                self._end_lunch(dashboard_page, now)
-            elif now.hour == 15 and now.minute >= 30:
-                self._clock_out(dashboard_page, now)
-
+            punch_id = self._punch.get_id()
+            if punch_id == 0 and now.hour == 7:
+                self._perform_action(dashboard_page.clock_in, 'Clock In', now, self._punch.in_)
+            elif now - self._get_punch(punch_id, 1) > timedelta(hours=4, minutes=randint(1, 30)):
+                self._perform_action(dashboard_page.start_lunch, 'Start Lunch', now, self._punch.start)
+            elif now - self._get_punch(punch_id, 2) > timedelta(minutes=randint(31, 35)):
+                self._perform_action(dashboard_page.end_lunch, 'End Lunch', now, self._punch.end)
+            elif now - self._get_punch(punch_id, 3) > timedelta(hours=4, minutes=randint(5, 10)):
+                self._perform_action(dashboard_page.clock_out, 'Clock Out', now, self._punch.out)
 
             time.sleep(60)
-
-    def _is_pto_day(self, dashboard, date):
-        pto = dashboard.go_to_pto()
-
-        return pto.is_pto_day(date)
 
     def _login_to_paylocity(self):
         """
@@ -65,44 +62,77 @@ class PunchCardManager:
         return dashboard_page
 
     def _is_clock_in_day(self, now, dashboard_page):
-        if now.weekday() > 5 or \
-                self._holiday.is_holiday(now) or \
-                self._is_pto_day(dashboard_page, now):
+        """
+        This function determines whether today is a day to clock in or not. It
+        will do so by checking if it is a weekend, company holiday, or a
+        requested and approved day off.
+
+        Parameters
+        ----------
+        now : datetime, required
+            The date to check against.
+
+        dashboard_page : Dashboard, required
+            Used for navigation to the PTO page.
+
+        Returns
+        -------
+        bool
+            Will return true for a day to clock in, false otherwise.
+        """
+        if now.weekday() > 5 or self._holiday.is_holiday(now) or dashboard.go_to_pto().is_pto_day(date):
             print('It is a weekend, holiday, or PTO day, skipping!')
             return False
 
         print('It is not a weekend, holiday, or PTO day.')
         return True
 
-    # TODO The 4 functions below this are really repetitive. Fix that.
-    def _clock_in(self, dashboard_page, now):
-        try:
-            dashboard_page.clock_in()
-            self._punch.in_(now)
-            self._pager.info('Clocked in at ' + now.isoformat())
-        except:
-            self._pager.alert('Did not clock in successfully.')
+    def _perform_action(self, action, action_str, time_of_action, db_action):
+        """
+        This function handles the action and error handling for each punch
+        for the day. It will alert if anything is at critical. Currently, even
+        INFO level messages will be sent to PagerDuty. Later, a .env var will
+        be included to set level of pages.
 
-    def _start_lunch(self, dashboard_page, now):
-        try:
-            dashboard_page.start_lunch()
-            self._punch.start(now)
-            self._pager.info('Started lunch at ' + now.isoformat())
-        except:
-            self._pager.alert('Did not start lunch successfully.')
+        Parameters
+        ----------
+        action : callback, required
+            The action to be performed on Paylocity's dashboard.
 
-    def _end_lunch(self, dashboard_page, now):
-        try:
-            dashboard_page.end_lunch()
-            self._punch.end(now)
-            self._pager.info('Ended lunch at ' + now.isoformat())
-        except:
-            self._pager.alert('Did not end lunch successfully.')
+        action_str : string, required
+            The name of the action being performed.
 
-    def _clock_out(self, dashboard_page, now):
+        time_of_action : datetime, required
+            The time at which the action is occurring.
+
+        db_action : callback, required
+            The action of logging in the database.
+        """
         try:
-            dashboard_page.clock_out()
-            self._punch.out(now)
-            self._pager.info('Clocked out at ' + now.isoformat())
+            action()
+            self._pager.info('%s at %s' % (action_str, time_of_action.strftime('%c')))
         except:
-            self._pager.alert('Did not clock out successfully.')
+            self._pager.alert('Did not %s successfully.' % (action_str))
+        
+        if not db_action(time_of_action):
+            self._pager.warning('Did not log %s to database' % (action_str))
+
+    def _get_punch(self, punch_id, position):
+        """
+        This function takes the ID of the punch, and the position desired for
+        clocking in and out.
+
+        Parameters
+        ----------
+        punch_id : int, required
+            The ID of the row for the punches for the day.
+
+        position : int, required
+            The position of the column desired to compare against.
+
+        Returns
+        -------
+        datetime
+            Converts the string in the database into a datetime object.
+        """
+        return datetime.strptime(self._punch.get_punch_by_id(punch_id)[position], '%Y-%m-%d %H:%M:%S.%f')
