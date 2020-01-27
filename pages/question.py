@@ -46,6 +46,7 @@ class Question:
 
     def is_on_dashboard(self):
         """Returns true if the browser landed on the dashboard page."""
+        # TODO Do NOT utilize the URL. It appears too fast, and can cause an app crash.
         return self._config.get_dashboard_url() in self._driver.current_url
 
     def answer_question(self):

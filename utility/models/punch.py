@@ -171,4 +171,10 @@ class Punch:
         except sqlite3.OperationalError:
             return False
 
+        self._id = 0
+
         return True
+
+    def get_id(self):
+        """Returns the ID provided by the insert for the day."""
+        return self._id
