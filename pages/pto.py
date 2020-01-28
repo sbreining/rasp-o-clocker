@@ -54,8 +54,12 @@ class PaidTimeOff:
 
         print('date %s is %s' % (row_of_importance[0], row_of_importance.pop()))
 
+        is_pto = False
+
         # TODO Parse the table.
 
         # TODO Check the date month and day against the table of what is APPROVED
 
-        return True
+        # TODO Navigate back to the dashboard before returning.
+
+        return is_pto

@@ -128,7 +128,7 @@ class PunchCardManager:
         bool
             Will return true for a day to clock in, false otherwise.
         """
-        if now.weekday() > 5 or self._holiday.is_holiday(now) or dashboard.go_to_pto().is_pto_day(date):
+        if now.weekday() > 5 or self._holiday.is_holiday(now) or dashboard_page.go_to_pto().is_pto_day(date):
             print('It is a weekend, holiday, or PTO day, skipping!')
             return False
 

@@ -88,4 +88,4 @@ class Dashboard:
             The web element that should be clicked on.
         """
         element.click()
-        self._driver.get('www.google.com')
+        self._driver.get('https://www.google.com')
