@@ -1,6 +1,7 @@
 from datetime import datetime, timedelta
 from utility.models import *
 from random import randint
+from selenium.common.exceptions import NoSuchElementException
 import pages
 import time
 
@@ -53,14 +54,10 @@ class PunchCardManager:
         question_page = login_page.login()
 
         # The login might've gone straight to the dashboard
-        if question_page.is_on_dashboard():
-            dashboard_page = pages.Dashboard(self._driver)
-            print('We are on the dashboard')
-        else:
-            dashboard_page = question_page.answer_question()
-            print('The question page happened')
+        if not question_page.is_on_question_page():
+            return pages.Dashboard(self._driver)
 
-        return dashboard_page
+        return question_page.answer_question()
 
     def _is_clock_in_day(self, now, dashboard_page):
         """
@@ -112,9 +109,9 @@ class PunchCardManager:
         try:
             action()
             self._pager.info('%s at %s' % (action_str, time_of_action.strftime('%c')))
-        except:
+        except NoSuchElementException:
             self._pager.alert('Did not %s successfully.' % (action_str))
-        
+
         if not db_action(time_of_action):
             self._pager.warning('Did not log %s to database' % (action_str))
 

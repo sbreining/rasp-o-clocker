@@ -1,4 +1,5 @@
 from .dashboard import Dashboard
+from selenium.common.exceptions import NoSuchElementException
 from selenium.webdriver.common.keys import Keys
 
 
@@ -21,7 +22,7 @@ class Question:
 
     Methods
     -------
-    is_on_dashboard()
+    is_on_question_page()
         Determines if it skipped the question page, and went straight to the
         dashboard.
 
@@ -43,18 +44,22 @@ class Question:
         """
         self._config = config
         self._driver = driver
+        self._path = '//label[@for="ChallengeAnswer"]'
 
-    def is_on_dashboard(self):
-        """Returns true if the browser landed on the dashboard page."""
-        # TODO Do NOT utilize the URL. It appears too fast, and can cause an app crash.
-        return self._config.get_dashboard_url() in self._driver.current_url
+    def is_on_question_page(self):
+        """Returns true if the browser landed on the question page."""
+        try:
+            self._driver.find_element_by_xpath(self._path)
+        except NoSuchElementException:
+            return False
+        
+        return True
 
     def answer_question(self):
         """Answers the secret question to continue to the Dashboard."""
 
         # Step 1: Figure out what the question is.
-        path = '//label[@for="ChallengeAnswer"]'
-        secret_question = self._driver.find_element_by_xpath(path).text
+        secret_question = self._driver.find_element_by_xpath(self._path).text
 
         # Step 2: Enter text into box.
         answer_box = self._driver.find_element_by_id('ChallengeAnswer')
