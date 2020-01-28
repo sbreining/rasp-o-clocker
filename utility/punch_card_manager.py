@@ -7,7 +7,56 @@ import time
 
 
 class PunchCardManager:
+    """This class is the general manager of the system.
+
+    It will handle validation, logging, and punching.
+
+    Attributes
+    ----------
+    _config : Config
+        Holds onto the configuration of the system.
+
+    _driver : Webdriver
+        The webdriver that controls the actions.
+
+    _holiday : Holiday
+        Model controlling the interactions with the holidays table.
+
+    _pager : PagerDuty
+        Responsible for notifying user of actions taken.
+
+    _punch : Punch
+        Model controlling the interactions with the punches table.
+
+    _start_hour : int
+        The hour which each day will start, not variable.
+
+    Methods
+    -------
+    start()
+        Starts the system working.
+
+    _get_punch(punch_id, position)
+        Gets the column from the punches table to compare datetimes.
+
+    _is_clock_in_day(now, dashboard_page)
+        Returns true if punches are supposed to occur for the day.
+
+    _login_to_paylocity()
+        Handles the actions of logging into paylocity.
+
+    _perform_action(action, action_str, time_of_action, db_action)
+        Performs the punch action based on the time of day.
+    """
     def __init__(self, args):
+        """
+        Instantiates the punch card manager instance.
+
+        Parameters
+        ----------
+        args : dictionary, required
+            Holds all necessary objects to make this manager function.
+        """
         self._config = args['config']
         self._driver = args['driver']
         self._pager = args['pager']
@@ -17,6 +66,7 @@ class PunchCardManager:
         self._punch = Punch(args['database'])
 
     def start(self):
+        """This function runs the show, making everything mesh together."""
         while True:
             dashboard_page = self._login_to_paylocity()
 
