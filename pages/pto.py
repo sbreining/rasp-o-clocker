@@ -44,6 +44,16 @@ class PaidTimeOff:
         """
         self._driver.find_element_by_id('tabStatus').click()
 
+        # BenefitsWidget
+        parent = self._driver.find_element_by_id('BenefitsWidget')
+        table = parent.find_element_by_class_name('k-grid-content')
+        
+        stuff = table.text.split('\n')
+
+        row_of_importance = stuff.pop().split(' ')
+
+        print('date %s is %s' % (row_of_importance[0], row_of_importance.pop()))
+
         # TODO Parse the table.
 
         # TODO Check the date month and day against the table of what is APPROVED
