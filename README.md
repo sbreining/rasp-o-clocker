@@ -12,7 +12,7 @@ own project, and automating a redundant task.
 3. Install dependencies: `pip install`
 4. Copy environment sample: `cp .env.sample .env`
 5. Fill in any necessary information in the `.env` file you just created.
-6. Run migration: `python bin/migrate`
+6. Run migration: `python scripts/migrate`
 
 After the migration is run, 10 holidays will be in the `holidays` table that
 are based on my current work place's holidays for the year of 2020. Anything
