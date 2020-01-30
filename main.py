@@ -1,6 +1,7 @@
 from config import Config
 from selenium.webdriver import Chrome
 from selenium.webdriver.chrome.options import Options
+from sys import exc_info
 from utility import Database, PagerDuty, PunchCardManager
 
 
@@ -27,7 +28,12 @@ def main():
 
     # Start the process manager
     punch_card_manager = PunchCardManager(args)
-    punch_card_manager.start()
+
+    try:
+        punch_card_manager.start()
+    except:
+        exctype, value = exc_info()[:2]
+        pager.alert('PROGRAM CRASH, needs restart.\nException - %s\nValue - %s' % exctype, value)
 
 
 if __name__ == "__main__":
