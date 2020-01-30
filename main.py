@@ -16,7 +16,7 @@ def main():
     c_op.add_argument('--headless')
 
     # Instantiate the driver
-    driver = Chrome()
+    driver = Chrome(chrome_options=c_op)
     driver.implicitly_wait(config.get_implicit_wait())
 
     # Instantiate the pager
