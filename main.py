@@ -1,5 +1,6 @@
 from config import Config
 from selenium.webdriver import Chrome
+from selenium.webdriver.chrome.options import Options
 from utility import Database, PagerDuty, PunchCardManager
 
 
@@ -9,6 +10,10 @@ def main():
 
     # Connect to the database
     db = Database(config)
+
+    # Set the options to have chrome be headless
+    c_op = Options()
+    c_op.add_argument('--headless')
 
     # Instantiate the driver
     driver = Chrome()

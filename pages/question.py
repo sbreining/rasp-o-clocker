@@ -44,25 +44,35 @@ class Question:
         """
         self._config = config
         self._driver = driver
-        self._path = '//label[@for="ChallengeAnswer"]'
 
     def is_on_question_page(self):
-        """Returns true if the browser landed on the question page."""
-        try:
-            self._driver.find_element_by_xpath(self._path)
-        except NoSuchElementException:
-            return False
+        """
+        Returns true if the browser landed on the question page.
         
-        return True
+        This is a little tricky to read. However, if it is successful in finding
+        the element with the class 'header-nav', then it immediately returns
+        False, which signifies landing on the dashboard (which should be the
+        case most of the time). If it takes 10 seconds to try and find the
+        element, but it cannot, it returns true, because that element is on the
+        dashboard, and we are on the question page.
+        """
+        try:
+            self._driver.find_element_by_class_name('header-nav')
+        except NoSuchElementException:
+            return True
+
+        return False
 
     def answer_question(self):
         """Answers the secret question to continue to the Dashboard."""
+        element_id = 'ChallengeAnswer'
 
         # Step 1: Figure out what the question is.
-        secret_question = self._driver.find_element_by_xpath(self._path).text
+        path = '//label[@for="%s"]' % element_id
+        secret_question = self._driver.find_element_by_xpath(path).text
 
         # Step 2: Enter text into box.
-        answer_box = self._driver.find_element_by_id('ChallengeAnswer')
+        answer_box = self._driver.find_element_by_id(element_id)
         answer_box.send_keys(self._config.get_questions()[secret_question])
 
         # Step 3: Hit enter to submit rather than finding the button.
