@@ -26,6 +26,12 @@ The idea is to run this with a process manager (like `supervisord`) to ensure it
 stays running on hardware that can stay active. My intended device was a
 raspberry pi, hence the name `Rasp-O-Clocker`.
 
+### Testing
+
+Using `pytest`, all test file names will go by `<filename>_test`. Test methods
+and functions are required by `pytest` to be `test_<method_name>`. And test
+classes are required to be `Test<class_name>`.
+
 ### Copyright
 
 MIT License
