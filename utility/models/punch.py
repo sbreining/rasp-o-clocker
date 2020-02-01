@@ -1,3 +1,4 @@
+from datetime import date
 import sqlite3
 
 
@@ -8,9 +9,6 @@ class Punch:
     ----------
     _connection : Database
         A connection to the Database.
-
-    _id : int
-        The ID for the row that should be updated for a given day.
 
     Methods
     -------
@@ -28,6 +26,21 @@ class Punch:
 
     out(datetime)
         Updates the punch card to have the time the day ended.
+
+    insert_new_day()
+        Adds a new day to the table for tracking punches.
+
+    get_most_recent_day()
+        Will return the most recent day added to the table.
+
+    is_work_day()
+        Using last row inserted, this will return bool determing if work day.
+
+    update_is_work_day(is_work_day)
+        Updates the punch day to determine if punches are needed or not.
+
+    _update_punch(datetime, sql)
+        This private method handles updating the punches for the day.
     """
 
     def __init__(self, connection):
@@ -40,7 +53,6 @@ class Punch:
             Holds on to database connection.
         """
         self._connection = connection
-        self._id = 0
 
     def get_punch_by_id(self, id_):
         """
@@ -64,12 +76,7 @@ class Punch:
         except sqlite3.OperationalError:
             return ()
 
-        results = self._connection.fetchall()
-
-        if len(results) == 0:
-            return ()
-
-        return results[0]
+        return self._connection.fetchone()
 
     def in_(self, datetime):
         """
@@ -85,18 +92,8 @@ class Punch:
         bool
             True on successful insert.
         """
-        sql = 'INSERT INTO punches(clock_in) VALUES(?)'
-        data = (datetime,)
-
-        try:
-            self._connection.execute(sql, data)
-            self._connection.commit()
-        except sqlite3.OperationalError:
-            return False
-
-        self._id = self._connection.get_last_row_id()
-
-        return True
+        sql = 'UPDATE punches SET clock_in=? WHERE id=?'
+        return self._update_punch(datetime, sql)
 
     def start(self, datetime):
         """
@@ -113,15 +110,7 @@ class Punch:
             True on successful update.
         """
         sql = 'UPDATE punches SET lunch_start=? WHERE id=?'
-        data = (datetime, self._id)
-
-        try:
-            self._connection.execute(sql, data)
-            self._connection.commit()
-        except sqlite3.OperationalError:
-            return False
-
-        return True
+        return self._update_punch(datetime, sql)
 
     def end(self, datetime):
         """
@@ -138,15 +127,7 @@ class Punch:
             True on successful update.
         """
         sql = 'UPDATE punches SET lunch_end=? WHERE id=?'
-        data = (datetime, self._id)
-
-        try:
-            self._connection.execute(sql, data)
-            self._connection.commit()
-        except sqlite3.OperationalError:
-            return False
-
-        return True
+        return self._update_punch(datetime, sql)
 
     def out(self, datetime):
         """
@@ -163,7 +144,68 @@ class Punch:
             True on successful update.
         """
         sql = 'UPDATE punches SET clock_out=? WHERE id=?'
-        data = (datetime, self._id)
+        return self._update_punch(datetime, sql)
+
+    def insert_new_day(self):
+        """
+        Adds a new day to the datatable for tracking if there needs punches or
+        for skipping the day entirely.
+
+        Returns
+        -------
+        bool
+            True on successful insert, false otherwise.
+        """
+        sql = 'INSERT INTO punches(punch_day) VALUES(?)'
+        data = (date.today(),)
+
+        try:
+            self._connection.execute(sql,data)
+            self._connection.commit()
+        except sqlite3.OperationalError:
+            return False
+
+        return True
+
+    def get_most_recent_day(self):
+        """
+        This will return the last row inserted into the table.
+
+        Returns
+        -------
+        tuple
+            Returns a tuple of the row of data.
+        """
+        sql = 'SELECT * FROM punches ORDER BY id DESC LIMIT 1'
+
+        try:
+            self._connection.execute(sql)
+        except sqlite3.OperationalError:
+            return ()
+        
+        return self._connection.fetchone()
+
+    def is_work_day(self):
+        """Returns whether today is a work day or not."""
+        return self.get_most_recent_day()[2]
+
+    def update_is_work_day(self, is_work_day):
+        """
+        This will update the punch day to avoid checking if we need to clock in
+        and out but only once based on weekends, holidays, or PTO days.
+
+        Parameters
+        ----------
+        is_work_day : bool, required
+            This is whether it is a valid day to punch in or not.
+
+        Returns
+        -------
+        bool
+            True on successful update, False otherwise.
+        """
+        sql = 'UPDATE punches SET is_work_day=? WHERE id=?'
+        data = (is_work_day,)
 
         try:
             self._connection.execute(sql, data)
@@ -171,10 +213,33 @@ class Punch:
         except sqlite3.OperationalError:
             return False
 
-        self._id = 0
-
         return True
 
-    def get_id(self):
-        """Returns the ID provided by the insert for the day."""
-        return self._id
+    def _update_punch(self, datetime, sql):
+        """
+        Will run the given sql with the datetime, updating the most recently
+        inserted row in the table for the given punch, passed in via the sql.
+
+        Parameters
+        ----------
+        datetime : datetime, required
+            The date to insert into the column.
+
+        sql : string, required
+            The sql for the column to update.
+
+        Returns
+        -------
+        bool
+            True on successful update, false otherwise.
+        """
+        id_ = self.get_most_recent_day()[0]
+        data = (datetime, id_,)
+
+        try:
+            self._connection.execute(sql, data)
+            self._connection.commit()
+        except sqlite3.OperationalError:
+            return False
+
+        return True

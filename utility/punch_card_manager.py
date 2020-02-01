@@ -36,17 +36,20 @@ class PunchCardManager:
     start()
         Starts the system working.
 
-    _get_punch(punch_id, position)
-        Gets the column from the punches table to compare datetimes.
+    _login_to_paylocity()
+        Handles the actions of logging into paylocity.
 
     _is_clock_in_day(now, dashboard_page)
         Returns true if punches are supposed to occur for the day.
 
-    _login_to_paylocity()
-        Handles the actions of logging into paylocity.
+    _check_resources(now)
+        This checks day of week, holiday table, and PTO table.
 
     _perform_action(action, action_str, time_of_action, db_action)
         Performs the punch action based on the time of day.
+
+    _get_punch(punch_id, position)
+        Gets the column from the punches table to compare datetimes.
     """
     def __init__(self, args):
         """
@@ -69,21 +72,22 @@ class PunchCardManager:
         """This function runs the show, making everything mesh together."""
         while True:
             now = datetime.now()
+            punch_id = self._punch.get_id()
 
-            # TODO Figure out how to check this once per day.
-            if not self._is_clock_in_day(now):
+            # TODO Figure out on what premise to insert a new day.
+
+            if not self._is_clock_in_day(now, punch_id):
                 # If it is not a day to clock in, sleep for greater intervals.
                 time.sleep(300)
                 continue
 
-            punch_id = self._punch.get_id()
             if punch_id == 0 and now.hour == self._start_hour:
                 self._perform_action('Clock In', now, self._punch.in_)
-            elif now - self._get_punch(punch_id, 1) > timedelta(hours=4, minutes=randint(1, 30)):
+            elif now - self._get_punch(punch_id, 3) > timedelta(hours=4, minutes=randint(1, 30)):
                 self._perform_action('Start Lunch', now, self._punch.start)
-            elif now - self._get_punch(punch_id, 2) > timedelta(minutes=randint(31, 35)):
+            elif now - self._get_punch(punch_id, 4) > timedelta(minutes=randint(31, 35)):
                 self._perform_action('End Lunch', now, self._punch.end)
-            elif now - self._get_punch(punch_id, 3) > timedelta(hours=4, minutes=randint(5, 10)):
+            elif now - self._get_punch(punch_id, 5) > timedelta(hours=4, minutes=randint(5, 10)):
                 self._perform_action('Clock Out', now, self._punch.out)
 
             time.sleep(60)
@@ -119,13 +123,38 @@ class PunchCardManager:
         now : datetime, required
             The date to check against.
 
-        dashboard_page : Dashboard, required
-            Used for navigation to the PTO page.
-
         Returns
         -------
         bool
             Will return true for a day to clock in, false otherwise.
+        """
+        determined = self._punch.is_work_day()
+        if determined != None:
+            return determined
+
+        is_clock_day = self._check_resources(now)
+
+        self._punch.update_is_work_day(is_clock_day)
+
+        return is_clock_day
+    
+    def _check_resources(self, now):
+        """
+        This method validates against the various resources if this is an
+        appropriate day to clock in or not. It starts with the day of the week
+        and holidays as they are the quickest checks. Then, if those do not
+        apply, logs into Paylocity and checks the PTO charts. This will later
+        be saved so this function is only run once a day.
+
+        Parameters
+        ----------
+        now : datetime, required
+            The day to check against, if the hours are included, no big deal.
+
+        Returns
+        -------
+        bool
+            False on a day which is not supposed to clock in and out, True otherwise.
         """
         if now.weekday() > 5 or self._holiday.is_holiday(now):
             print('It is a weekend or holiday, skipping!')

@@ -33,7 +33,7 @@ def main():
         punch_card_manager.start()
     except:
         exctype, value = exc_info()[:2]
-        pager.alert('PROGRAM CRASH, needs restart.\nException - %s\nValue - %s' % exctype, value)
+        pager.alert('PROGRAM CRASH, needs restart.\nException - %s\nValue - %s' % (exctype, value))
 
 
 if __name__ == "__main__":

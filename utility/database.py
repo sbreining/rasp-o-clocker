@@ -29,6 +29,9 @@ class Database:
     fetchall()
         After executing the sql, call fetch to get the models.
 
+    fetchone()
+        After executing the sql, call fetch to return only model.
+
     get_last_row_id()
         On an insert, this will return the new row id if applicable.
     """
@@ -76,6 +79,17 @@ class Database:
             The list of data returned from the query.
         """
         return self._cursor.fetchall()
+
+    def fetchone(self):
+        """
+        After executing the query, this will return the data.
+
+        Return
+        -------
+        tuple
+            The list of data returned from the query.
+        """
+        return self._cursor.fetchone()
     
     def get_last_row_id(self):
         """

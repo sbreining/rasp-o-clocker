@@ -32,6 +32,8 @@ Using `pytest`, all test file names will go by `<filename>_test`. Test methods
 and functions are required by `pytest` to be `test_<method_name>`. And test
 classes are required to be `Test<class_name>`.
 
+Run test suite with: `pytest`
+
 ### Copyright
 
 MIT License
