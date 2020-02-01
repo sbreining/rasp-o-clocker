@@ -13,11 +13,11 @@ def main():
     db = Database(config)
 
     # Set the options to have chrome be headless
-    c_op = Options()
-    c_op.add_argument('--headless')
+    op = Options()
+    op.add_argument('--headless')
 
     # Instantiate the driver
-    driver = Chrome(chrome_options=c_op)
+    driver = Chrome(options=op)
     driver.implicitly_wait(config.get_implicit_wait())
 
     # Instantiate the pager
@@ -32,8 +32,8 @@ def main():
     try:
         punch_card_manager.start()
     except:
-        exctype, value = exc_info()[:2]
-        pager.alert('PROGRAM CRASH, needs restart.\nException - %s\nValue - %s' % (exctype, value))
+        exception_type, value = exc_info()[:2]
+        pager.alert('PROGRAM CRASH, needs restart.\nException - %s\nValue - %s' % (exception_type, value))
 
 
 if __name__ == "__main__":

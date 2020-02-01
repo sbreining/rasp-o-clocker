@@ -129,7 +129,7 @@ class PunchCardManager:
             Will return true for a day to clock in, false otherwise.
         """
         determined = self._punch.is_work_day()
-        if determined != None:
+        if determined is not None:
             return determined
 
         is_clock_day = self._check_resources(now)
@@ -195,13 +195,13 @@ class PunchCardManager:
             'Clock Out': dashboard.clock_out
         }
         try:
-            action()
+            action[action_str]()
             self._pager.info('%s at %s' % (action_str, time_of_action.strftime('%c')))
         except NoSuchElementException:
-            self._pager.alert('Did not %s successfully.' % (action_str))
+            self._pager.alert('Did not %s successfully.' % action_str)
 
         if not db_action(time_of_action):
-            self._pager.warning('Did not log %s to database' % (action_str))
+            self._pager.warning('Did not log %s to database' % action_str)
 
     def _get_punch(self, punch_id, position):
         """

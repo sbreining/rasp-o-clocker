@@ -43,7 +43,7 @@ class Config:
         """
         Returns login information; company ID, login and password.
 
-        Return
+        Returns
         -------
         Dictionary
             Get login information using keys: companyId, username, and password.
@@ -58,7 +58,7 @@ class Config:
         """
         Returns the url in string form for where to log in.
 
-        Return
+        Returns
         -------
         string
         """
@@ -68,7 +68,7 @@ class Config:
         """
         Returns the url for the dashboard page.
 
-        Return
+        Returns
         -------
         string
         """
@@ -78,7 +78,7 @@ class Config:
         """
         Returns the max time (seconds) selenium waits for page load.
 
-        Return
+        Returns
         -------
         int
         """
@@ -88,7 +88,7 @@ class Config:
         """
         Returns path to the database, this relative to this file.
 
-        Return
+        Returns
         -------
         string
         """
@@ -98,7 +98,7 @@ class Config:
         """
         Returns secret questions-answers as key-value pairs in dictionary.
 
-        Return
+        Returns
         -------
         Dictionary
             Use the secret questions as keys to get the secret answers.
@@ -113,7 +113,7 @@ class Config:
         """
         Returns information necessary for PagerDuty
 
-        Return
+        Returns
         -------
         Dictionary
             Contains the information to login to the e-mail service for alerts.
@@ -128,8 +128,8 @@ class Config:
         """
         Returns the hour at which to start work.
 
-        Return
-        ------
+        Returns
+        -------
         int
             The hour (based on 24 hour clock) to start work.
         """

@@ -64,7 +64,14 @@ class Question:
         return False
 
     def answer_question(self):
-        """Answers the secret question to continue to the Dashboard."""
+        """
+        Answers the secret question to continue to the Dashboard.
+
+        Returns
+        -------
+        Dashboard
+            The dashboard page object.
+        """
         element_id = 'ChallengeAnswer'
 
         # Step 1: Figure out what the question is.

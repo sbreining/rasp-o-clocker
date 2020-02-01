@@ -60,7 +60,7 @@ class Database:
         Executes the provided sql statement with the given data.
 
         Parameters
-        --------
+        ----------
         sql : string, required
             The query to be executed.
 
@@ -73,7 +73,7 @@ class Database:
         """
         After executing the query, this will return the data.
 
-        Return
+        Returns
         -------
         list
             The list of data returned from the query.
@@ -84,7 +84,7 @@ class Database:
         """
         After executing the query, this will return the data.
 
-        Return
+        Returns
         -------
         tuple
             The list of data returned from the query.
@@ -95,7 +95,7 @@ class Database:
         """
         Will return the last row id, generally used after an insert
 
-        Return
+        Returns
         -------
         int
             The value of the last row inserted.

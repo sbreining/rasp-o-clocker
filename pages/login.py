@@ -38,8 +38,8 @@ class Login:
         """
         Locates text boxes for credentials and sends keys to login.
 
-        Return
-        ----------
+        Returns
+        -------
         Question
             The Question page object in case we landed there.
         """

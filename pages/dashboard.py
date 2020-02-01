@@ -65,7 +65,7 @@ class Dashboard:
         """
         Will navigate to the page with the table of PTO approvals.
 
-        Return
+        Returns
         -------
         PaidTimeOff
             The PTO page object to handle finding PTO.
@@ -83,7 +83,7 @@ class Dashboard:
         Paylocity web page, just to have it log use out due to expired session.
 
         Parameters
-        -------
+        ----------
         element : WebElement, required
             The web element that should be clicked on.
         """
