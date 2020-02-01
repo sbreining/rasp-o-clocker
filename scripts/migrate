@@ -73,6 +73,8 @@ try:
         '''
         CREATE TABLE punches(
             [id] INTEGER PRIMARY KEY,
+            [punch_day] DATETIME NOT NULL,
+            [is_work_day] BOOLEAN NULLABLE,
             [clock_in] DATETIME NULLABLE,
             [lunch_start] DATETIME NULLABLE,
             [lunch_end] DATETIME NULLABLE,
