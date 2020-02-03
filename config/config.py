@@ -32,6 +32,7 @@ class Config:
     get_pager_duty_info()
         Returns the information needed for PagerDuty
     """
+
     def __init__(self):
         # Create .env file path.
         dotenv_path = join(dirname(__file__), '../.env')
@@ -93,7 +94,7 @@ class Config:
         string
         """
         return join(dirname(__file__), '../data/database.db')
-    
+
     def get_questions(self):
         """
         Returns secret questions-answers as key-value pairs in dictionary.
@@ -108,7 +109,7 @@ class Config:
             getenv('SECRET_Q_2'): getenv('SECRET_A_2'),
             getenv('SECRET_Q_3'): getenv('SECRET_A_3')
         }
-    
+
     def get_pager_duty_info(self):
         """
         Returns information necessary for PagerDuty
@@ -123,7 +124,7 @@ class Config:
             'password': getenv('EMAIL_PASSWORD'),
             'to': getenv('SMS_GATEWAY')
         }
-    
+
     def get_start_hour(self):
         """
         Returns the hour at which to start work.
