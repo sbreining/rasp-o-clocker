@@ -51,6 +51,7 @@ class PunchCardManager:
     _get_punch(punch_id, position)
         Gets the column from the punches table to compare datetimes.
     """
+
     def __init__(self, args):
         """
         Instantiates the punch card manager instance.
@@ -87,7 +88,6 @@ class PunchCardManager:
                 time.sleep(300)
                 continue
 
-            # TODO Clean up the elif block here, and just assign args and call function once.
             if punch_card[3] is None and now.hour == self._start_hour:
                 self._perform_action('Clock In', now, self._punch.in_)
             elif self._should_punch(punch_card, 3, 4, now, timedelta(hours=4, minutes=randint(1, 30))):
@@ -249,5 +249,22 @@ class PunchCardManager:
         return now - last_punch > delta
 
     def _get_datetime_from_date_string(self, date_str):
-        # TODO Doc block this.
+        """
+        Converts a string from given format into a datetime object.
+
+        Examples
+        --------
+        2020-01-01 01:01:01.010101
+        1923-06-12 15:42:59.326458
+
+        Parameters
+        ----------
+        date_str : string, required
+            The string that will be parsed and turned into a datetime.
+
+        Returns
+        -------
+        datetime
+            The datetime object that was parsed from the string passed in.
+        """
         return datetime.strptime(date_str, '%Y-%m-%d %H:%M:%S.%f')
