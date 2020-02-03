@@ -1,4 +1,4 @@
-from datetime import datetime, timedelta
+from datetime import date, datetime, timedelta
 from utility.models import *
 from random import randint
 from selenium.common.exceptions import NoSuchElementException
@@ -71,23 +71,25 @@ class PunchCardManager:
     def start(self):
         """This function runs the show, making everything mesh together."""
         while True:
+            # TODO If there is no row in the db, is this gonna blow up?
+            if date.today() > self._punch.get_most_recent_day()[1]:
+                self._punch.insert_new_day()
+
             now = datetime.now()
-            punch_id = self._punch.get_id()
 
-            # TODO Figure out on what premise to insert a new day.
-
-            if not self._is_clock_in_day(now, punch_id):
+            if not self._is_clock_in_day(now):
                 # If it is not a day to clock in, sleep for greater intervals.
                 time.sleep(300)
                 continue
 
-            if punch_id == 0 and now.hour == self._start_hour:
+            punch_card = self._punch.get_most_recent_day()
+            if punch_card[3] is None and now.hour == self._start_hour:
                 self._perform_action('Clock In', now, self._punch.in_)
-            elif now - self._get_punch(punch_id, 3) > timedelta(hours=4, minutes=randint(1, 30)):
+            elif self._should_punch(punch_card, 4, 3, now, timedelta(hours=4, minutes=randint(1, 30))):
                 self._perform_action('Start Lunch', now, self._punch.start)
-            elif now - self._get_punch(punch_id, 4) > timedelta(minutes=randint(31, 35)):
+            elif self._should_punch(punch_card, 5, 4, now, timedelta(minutes=randint(31, 35))):
                 self._perform_action('End Lunch', now, self._punch.end)
-            elif now - self._get_punch(punch_id, 5) > timedelta(hours=4, minutes=randint(5, 10)):
+            elif self._should_punch(punch_card, 6, 5, now, timedelta(hours=4, minutes=randint(5, 10))):
                 self._perform_action('Clock Out', now, self._punch.out)
 
             time.sleep(60)
@@ -203,22 +205,41 @@ class PunchCardManager:
         if not db_action(time_of_action):
             self._pager.warning('Did not log %s to database' % action_str)
 
-    def _get_punch(self, punch_id, position):
+    @staticmethod
+    def _should_punch(punch_card, prev_punch_pos, cur_punch_pos, now, delta):
         """
         This function takes the ID of the punch, and the position desired for
         clocking in and out.
 
         Parameters
         ----------
-        punch_id : int, required
-            The ID of the row for the punches for the day.
+        punch_card : tuple, required
+            This is the collection from the database.
 
-        position : int, required
+        prev_punch_pos : int, required
             The position of the column desired to compare against.
+
+        cur_punch_pos : int, required
+            Check to make sure the punch is None so we don't over punch it.
+
+        now : datetime, required
+            Going to ensure we pass the timedelta.
+
+        delta : timedelta, required
+            The delta to cover.
 
         Returns
         -------
-        datetime
-            Converts the string in the database into a datetime object.
+        bool
+            Returns if we should perform the action or not.
         """
-        return datetime.strptime(self._punch.get_punch_by_id(punch_id)[position], '%Y-%m-%d %H:%M:%S.%f')
+        if punch_card[cur_punch_pos] is not None:
+            return False
+
+        last_punch_str = punch_card[prev_punch_pos]
+        if last_punch_str is None:
+            return False
+
+        last_punch = datetime.strptime(last_punch_str, '%Y-%m-%d %H:%M:%S.%f')
+
+        return now - last_punch > delta
