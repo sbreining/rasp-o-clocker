@@ -90,11 +90,11 @@ class PunchCardManager:
             # TODO Clean up the elif block here, and just assign args and call function once.
             if punch_card[3] is None and now.hour == self._start_hour:
                 self._perform_action('Clock In', now, self._punch.in_)
-            elif self._should_punch(punch_card, 4, 3, now, timedelta(hours=4, minutes=randint(1, 30))):
+            elif self._should_punch(punch_card, 3, 4, now, timedelta(hours=4, minutes=randint(1, 30))):
                 self._perform_action('Start Lunch', now, self._punch.start)
-            elif self._should_punch(punch_card, 5, 4, now, timedelta(minutes=randint(31, 35))):
+            elif self._should_punch(punch_card, 4, 5, now, timedelta(minutes=randint(31, 35))):
                 self._perform_action('End Lunch', now, self._punch.end)
-            elif self._should_punch(punch_card, 6, 5, now, timedelta(hours=4, minutes=randint(5, 10))):
+            elif self._should_punch(punch_card, 5, 6, now, timedelta(hours=4, minutes=randint(5, 10))):
                 self._perform_action('Clock Out', now, self._punch.out)
 
             time.sleep(60)
@@ -210,7 +210,7 @@ class PunchCardManager:
         if not db_action(time_of_action):
             self._pager.warning('Did not log %s to database' % action_str)
 
-    def _should_punch(punch_card, prev_punch_pos, cur_punch_pos, now, delta):
+    def _should_punch(self, punch_card, prev_punch_pos, cur_punch_pos, now, delta):
         """
         This function takes the ID of the punch, and the position desired for
         clocking in and out.
