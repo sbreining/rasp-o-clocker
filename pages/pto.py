@@ -48,6 +48,11 @@ class PaidTimeOff:
         ----------
         date : datetime, required
             The date time object to test against PTO days.
+
+        Returns
+        -------
+        bool
+            Returns True if the day is a PTO day, False otherwise.
         """
         self._driver.find_element_by_id('tabStatus').click()
 
@@ -91,11 +96,18 @@ class PaidTimeOff:
         return first_date <= date <= end_day
 
     def _get_pto_row(self):
-        """Returns an array based on column of each value in the last row."""
+        """
+        Returns an array based on column of each value in the last row.
+
+        Returns
+        -------
+        list
+            A list of the row data from the paid time off page.
+        """
         # Locate the div containing the approved PTO
         parent = self._driver.find_element_by_id('BenefitsWidget')
 
-        # Get the table containing the rows of the tmie off.
+        # Get the table containing the rows of the time off.
         table = parent.find_element_by_class_name('k-grid-content')
 
         # Get the text out of the table, split on '\n' then get the last row.
