@@ -9,9 +9,6 @@ class PagerDuty:
     _from : string
         The e-mail address for login, and the from address.
 
-    _password : string
-        Password to login to the e-mail account.
-
     _to : string
         The text number using e-mail that will receive the alert.
 
@@ -45,10 +42,10 @@ class PagerDuty:
         pager_duty_info = config.get_pager_duty_info()
 
         self._from = pager_duty_info['from']
-        self._password = pager_duty_info['password']
         self._to = pager_duty_info['to']
 
         self._server = SMTP_SSL('smtp.gmail.com', 465)
+        self._server.login(self._from.split('@')[0], pager_duty_info['password'])
 
     def _page(self, level, message):
         """
@@ -63,12 +60,8 @@ class PagerDuty:
         message: string, required
             The message to be sent which is the core of the information.
         """
-        self._server.login(self._from.split('@')[0], self._password)
-
         body = 'Level - ' + level + '\nMessage - ' + message
         self._server.sendmail(self._from, self._to, body)
-
-        self._server.quit()
 
     def alert(self, message):
         """

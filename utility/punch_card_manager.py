@@ -210,7 +210,6 @@ class PunchCardManager:
         if not db_action(time_of_action):
             self._pager.warning('Did not log %s to database' % action_str)
 
-    @staticmethod
     def _should_punch(punch_card, prev_punch_pos, cur_punch_pos, now, delta):
         """
         This function takes the ID of the punch, and the position desired for
