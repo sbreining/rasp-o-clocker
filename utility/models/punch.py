@@ -204,8 +204,9 @@ class Punch:
         bool
             True on successful update, False otherwise.
         """
+
         sql = 'UPDATE punches SET is_work_day=? WHERE id=?'
-        data = (is_work_day,)
+        data = (is_work_day, self.get_most_recent_day()[0],)
 
         try:
             self._connection.execute(sql, data)
