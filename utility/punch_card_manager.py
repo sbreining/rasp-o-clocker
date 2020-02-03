@@ -70,9 +70,14 @@ class PunchCardManager:
 
     def start(self):
         """This function runs the show, making everything mesh together."""
+        if self._punch.get_most_recent_day() is None:
+            self._punch.insert_new_day()
+
         while True:
-            # TODO If there is no row in the db, is this gonna blow up?
-            if date.today() > self._punch.get_most_recent_day()[1]:
+            punch_card = self._punch.get_most_recent_day()
+
+            cur_punch_day = self._get_datetime_from_date_string('%s 00:00:00.000' % punch_card[1]).date()
+            if date.today() - cur_punch_day > timedelta(days=1):
                 self._punch.insert_new_day()
 
             now = datetime.now()
@@ -82,7 +87,7 @@ class PunchCardManager:
                 time.sleep(300)
                 continue
 
-            punch_card = self._punch.get_most_recent_day()
+            # TODO Clean up the elif block here, and just assign args and call function once.
             if punch_card[3] is None and now.hour == self._start_hour:
                 self._perform_action('Clock In', now, self._punch.in_)
             elif self._should_punch(punch_card, 4, 3, now, timedelta(hours=4, minutes=randint(1, 30))):
@@ -240,6 +245,10 @@ class PunchCardManager:
         if last_punch_str is None:
             return False
 
-        last_punch = datetime.strptime(last_punch_str, '%Y-%m-%d %H:%M:%S.%f')
+        last_punch = self._get_datetime_from_date_string(last_punch_str)
 
         return now - last_punch > delta
+
+    def _get_datetime_from_date_string(self, date_str):
+        # TODO Doc block this.
+        return datetime.strptime(date_str, '%Y-%m-%d %H:%M:%S.%f')
