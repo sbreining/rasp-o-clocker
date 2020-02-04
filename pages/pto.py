@@ -2,7 +2,7 @@ from datetime import datetime
 from datetime import timedelta
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
-from selenium.webdriver.support import expected_conditions as EC
+from selenium.webdriver.support import expected_conditions as ec
 
 
 DATE = 0
@@ -120,7 +120,7 @@ class PaidTimeOff:
         self._driver.find_element_by_class_name('unav-main-menu-title').click()
         try:
             element = WebDriverWait(self._driver, 1).until(
-                EC.visibility_of_element_located((By.CLASS_NAME, 'unav-drawer-item-title'))
+                ec.visibility_of_element_located((By.CLASS_NAME, 'unav-drawer-item-title'))
             )
         finally:
             element.click()
