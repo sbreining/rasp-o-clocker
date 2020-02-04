@@ -77,8 +77,10 @@ class PunchCardManager:
         while True:
             punch_card = self._punch.get_most_recent_day()
 
-            cur_punch_day = self._get_datetime_from_date_string('%s 00:00:00.000' % punch_card[1]).date()
-            if date.today() - cur_punch_day > timedelta(days=1):
+            date_str = '%s 00:00:00.000' % punch_card[1]
+            cur_punch_day = self._get_datetime_from_date_string(date_str).date()
+
+            if date.today() - cur_punch_day >= timedelta(days=1):
                 self._punch.insert_new_day()
 
             now = datetime.now()
