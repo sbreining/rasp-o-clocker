@@ -94,7 +94,7 @@ class PunchCardManager:
                 self._perform_action('Start Lunch', now, self._punch.start)
             elif self._should_punch(punch_card, 4, 5, now, timedelta(minutes=randint(31, 35))):
                 self._perform_action('End Lunch', now, self._punch.end)
-            elif self._should_punch(punch_card, 5, 6, now, timedelta(hours=4, minutes=randint(5, 10))):
+            elif self._should_punch(punch_card, 3, 6, now, timedelta(hours=8, minutes=randint(10, 15))):
                 self._perform_action('Clock Out', now, self._punch.out)
 
             time.sleep(60)
