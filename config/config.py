@@ -40,7 +40,8 @@ class Config:
         # Load file from the path.
         load_dotenv(dotenv_path)
 
-    def get_login(self):
+    @staticmethod
+    def get_login():
         """
         Returns login information; company ID, login and password.
 
@@ -55,7 +56,8 @@ class Config:
             'password': getenv('PASSWORD')
         }
 
-    def get_login_url(self):
+    @staticmethod
+    def get_login_url():
         """
         Returns the url in string form for where to log in.
 
@@ -65,7 +67,8 @@ class Config:
         """
         return getenv('PAYLOCITY_LOGIN_URL')
 
-    def get_dashboard_url(self):
+    @staticmethod
+    def get_dashboard_url():
         """
         Returns the url for the dashboard page.
 
@@ -75,7 +78,8 @@ class Config:
         """
         return getenv('PAYLOCITY_BASE_URL')
 
-    def get_implicit_wait(self):
+    @staticmethod
+    def get_implicit_wait():
         """
         Returns the max time (seconds) selenium waits for page load.
 
@@ -85,7 +89,8 @@ class Config:
         """
         return getenv('IMPLICIT_WAIT')
 
-    def get_db_path(self):
+    @staticmethod
+    def get_db_path():
         """
         Returns path to the database, this relative to this file.
 
@@ -95,7 +100,8 @@ class Config:
         """
         return join(dirname(__file__), '../data/database.db')
 
-    def get_questions(self):
+    @staticmethod
+    def get_questions():
         """
         Returns secret questions-answers as key-value pairs in dictionary.
 
@@ -110,7 +116,8 @@ class Config:
             getenv('SECRET_Q_3'): getenv('SECRET_A_3')
         }
 
-    def get_pager_duty_info(self):
+    @staticmethod
+    def get_pager_duty_info():
         """
         Returns information necessary for PagerDuty
 
@@ -125,7 +132,8 @@ class Config:
             'to': getenv('SMS_GATEWAY')
         }
 
-    def get_start_hour(self):
+    @staticmethod
+    def get_start_hour():
         """
         Returns the hour at which to start work.
 

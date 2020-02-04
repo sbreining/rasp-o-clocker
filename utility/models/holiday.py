@@ -1,4 +1,5 @@
 import sqlite3
+from datetime import datetime
 from calendar import month_name
 
 
@@ -88,7 +89,7 @@ class Holiday:
 
         return row[0]
 
-    def is_holiday(self, date):
+    def is_holiday(self, date: datetime) -> bool:
         """
         Checks if the month-day-year combination is a holiday.
 

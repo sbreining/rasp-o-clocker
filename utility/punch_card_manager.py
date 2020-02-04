@@ -248,7 +248,8 @@ class PunchCardManager:
 
         return now - last_punch > delta
 
-    def _get_datetime_from_date_string(self, date_str):
+    @staticmethod
+    def _get_datetime_from_date_string(date_str):
         """
         Converts a string from given format into a datetime object.
 

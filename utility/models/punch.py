@@ -34,7 +34,7 @@ class Punch:
         Will return the most recent day added to the table.
 
     is_work_day()
-        Using last row inserted, this will return bool determing if work day.
+        Using last row inserted, this will return bool determining if work day.
 
     update_is_work_day(is_work_day)
         Updates the punch day to determine if punches are needed or not.
@@ -160,7 +160,7 @@ class Punch:
         data = (date.today(),)
 
         try:
-            self._connection.execute(sql,data)
+            self._connection.execute(sql, data)
             self._connection.commit()
         except sqlite3.OperationalError:
             return False

@@ -3,6 +3,8 @@ from datetime import timedelta
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as ec
+from selenium.common.exceptions import TimeoutException
+import time
 
 
 DATE = 0
@@ -62,7 +64,8 @@ class PaidTimeOff:
 
         return is_pto
 
-    def _determine_date_is_pto(self, nearest_pto, date):
+    @staticmethod
+    def _determine_date_is_pto(nearest_pto, date):
         """
         This private function analyzes the row passed in to see if the given
         date is an approved PTO day.
@@ -118,9 +121,15 @@ class PaidTimeOff:
     def _navigate_back_to_dash(self):
         """Returns back to the dashboard page."""
         self._driver.find_element_by_class_name('unav-main-menu-title').click()
+
+        element = None
         try:
             element = WebDriverWait(self._driver, 1).until(
                 ec.visibility_of_element_located((By.CLASS_NAME, 'unav-drawer-item-title'))
             )
+        except TimeoutException:
+            # Sleep for 3 extra seconds with hopes the menu opens up.
+            time.sleep(3)
+            element = self._driver.find_element_by_class_name('unav-drawer-item-title')
         finally:
             element.click()
