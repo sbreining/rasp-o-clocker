@@ -1,4 +1,5 @@
 from config import Config
+from os.path import join, dirname
 from selenium.webdriver import Chrome
 from selenium.webdriver.chrome.options import Options
 from sys import exc_info
@@ -7,7 +8,8 @@ from utility import Database, PagerDuty, PunchCardManager
 
 def main():
     # Load up environment configuration
-    config = Config()
+    env_path = join(dirname(__file__), './.env')
+    config = Config(env_path)
 
     # Connect to the database
     db = Database(config)

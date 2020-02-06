@@ -31,14 +31,22 @@ class Config:
     
     get_pager_duty_info()
         Returns the information needed for PagerDuty
+    
+    get_start_hour()
+        The hour to start the clock in process.
     """
 
-    def __init__(self):
-        # Create .env file path.
-        dotenv_path = join(dirname(__file__), '../.env')
+    def __init__(self, file_path):
+        """
+        Creates the config object to hold on to environment variables.
 
+        Parameters
+        ----------
+        file_path : string, required
+            The path to the env file.
+        """
         # Load file from the path.
-        load_dotenv(dotenv_path)
+        load_dotenv(file_path)
 
     @staticmethod
     def get_login():
