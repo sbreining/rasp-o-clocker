@@ -1,9 +1,9 @@
-from config import Config
+from .config import Config
 from os.path import join, dirname
 from selenium.webdriver import Chrome
 from selenium.webdriver.chrome.options import Options
 from sys import exc_info
-from utility import Database, PagerDuty, PunchCardManager
+from .utility import Database, PagerDuty, PunchCardManager
 
 
 def main():

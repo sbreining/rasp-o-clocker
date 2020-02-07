@@ -1,8 +1,8 @@
 from datetime import date, datetime, timedelta
-from utility.models import *
+from src.utility import *
 from random import randint
 from selenium.common.exceptions import NoSuchElementException
-import pages
+from src import pages
 import time
 
 
