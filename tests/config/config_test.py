@@ -1,5 +1,20 @@
-def test_get_login_returns_credentials():
-    pass
+from src.config import Config
+
+
+def test_get_login_returns_credentials(monkeypatch):
+    monkeypatch.setenv('COMPANY_CODE', 'someId')
+    monkeypatch.setenv('USERNAME', 'someUsername')
+    monkeypatch.setenv('PASSWORD', 'somePassword')
+
+    login = Config.get_login()
+
+    expected = {
+        'companyId': 'someId',
+        'username': 'someUsername',
+        'password': 'somePassword'
+    }
+
+    assert login == expected
 
 
 def test_get_login_url_returns_url_string():

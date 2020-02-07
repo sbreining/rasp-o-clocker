@@ -20,7 +20,7 @@ that needs to be adjusted, added, or otherwise is up to you.
 
 ### Usage
 
-`python main.py`
+`python src/main.py`
 
 The idea is to run this with a process manager (like `supervisord`) to ensure it
 stays running on hardware that can stay active. My intended device was a
@@ -32,7 +32,7 @@ Using `pytest`, all test file names will go by `<filename>_test`. Test methods
 and functions are required by `pytest` to be `test_<method_name>`. And test
 classes are required to be `Test<class_name>`.
 
-Run test suite with: `pytest`
+Run test suite with: `python -m pytest`
 
 ### Copyright
 
