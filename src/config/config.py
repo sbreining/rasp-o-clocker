@@ -95,7 +95,7 @@ class Config:
         -------
         int
         """
-        return getenv('IMPLICIT_WAIT')
+        return int(getenv('IMPLICIT_WAIT'))
 
     @staticmethod
     def get_db_path():
@@ -106,7 +106,7 @@ class Config:
         -------
         string
         """
-        return join(dirname(__file__), '../data/database.db')
+        return join(dirname(__file__), '../../data/database.db')
 
     @staticmethod
     def get_questions():
