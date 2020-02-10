@@ -1,15 +1,16 @@
-from .config import Config
+from config import Config
+from dotenv import load_dotenv
 from os.path import join, dirname
 from selenium.webdriver import Chrome
 from selenium.webdriver.chrome.options import Options
 from sys import exc_info
-from .utility import Database, PagerDuty, PunchCardManager
+from utility import Database, PagerDuty, PunchCardManager
 
 
 def main():
     # Load up environment configuration
-    env_path = join(dirname(__file__), './.env')
-    config = Config(env_path)
+    load_dotenv(join(dirname(__file__), './.env'))
+    config = Config()
 
     # Connect to the database
     db = Database(config)

@@ -1,6 +1,5 @@
 from os import getenv
 from os.path import join, dirname
-from dotenv import load_dotenv
 
 
 class Config:
@@ -35,18 +34,6 @@ class Config:
     get_start_hour()
         The hour to start the clock in process.
     """
-
-    def __init__(self, file_path):
-        """
-        Creates the config object to hold on to environment variables.
-
-        Parameters
-        ----------
-        file_path : string, required
-            The path to the env file.
-        """
-        # Load file from the path.
-        load_dotenv(file_path)
 
     @staticmethod
     def get_login():

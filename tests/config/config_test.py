@@ -1,4 +1,4 @@
-from src.config import Config
+from config import Config
 
 
 def test_get_login_returns_credentials(monkeypatch):
