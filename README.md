@@ -20,7 +20,7 @@ that needs to be adjusted, added, or otherwise is up to you.
 
 ### Usage
 
-`python src/main.py`
+`python main.py`
 
 The idea is to run this with a process manager (like `supervisord`) to ensure it
 stays running on hardware that can stay active. My intended device was a
@@ -33,6 +33,10 @@ and functions are required by `pytest` to be `test_<method_name>`. And test
 classes are required to be `Test<class_name>`.
 
 Run test suite with: `python -m pytest`
+
+For coverage run with: `coverage run -m pytest`
+
+And to prettify the coverage run: `coverage html`
 
 ### Copyright
 
