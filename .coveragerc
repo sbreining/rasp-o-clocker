@@ -1,0 +1,9 @@
+[run]
+omit =
+    .pytest_cache/*
+    bin/*
+    data/*
+    htmlcov/*
+    lib/*
+    scripts/*
+    tests/*
