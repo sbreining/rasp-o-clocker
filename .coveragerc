@@ -3,6 +3,7 @@ omit =
     .pytest_cache/*
     bin/*
     data/*
+    env/*
     htmlcov/*
     lib/*
     scripts/*
