@@ -24,6 +24,10 @@ def test_is_pto_day_returns_false_when_request_not_approved():
     driver_mock = driver('Not')
 
     pto = PaidTimeOff(driver_mock)
+
+    # TODO: Figure out how to mock the WebDriverWait module instead.
+    pto._navigate_back_to_dash = Mock()
+
     actual = pto.is_pto_day(datetime.now())
 
     assert actual is False
