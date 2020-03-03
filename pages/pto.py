@@ -125,11 +125,15 @@ class PaidTimeOff:
         element = None
         try:
             element = WebDriverWait(self._driver, 1).until(
-                ec.visibility_of_element_located((By.CLASS_NAME, 'unav-drawer-item-title'))
+                ec.visibility_of_element_located(
+                    (By.CLASS_NAME, 'unav-drawer-item-title')
+                )
             )
         except TimeoutException:
             # Sleep for 3 extra seconds with hopes the menu opens up.
             time.sleep(3)
-            element = self._driver.find_element_by_class_name('unav-drawer-item-title')
+            element = self._driver.find_element_by_class_name(
+                'unav-drawer-item-title'
+            )
         finally:
             element.click()
