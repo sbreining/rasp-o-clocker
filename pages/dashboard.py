@@ -1,4 +1,6 @@
 from .pto import PaidTimeOff
+from selenium.webdriver.chrome.webdriver import WebDriver
+from selenium.webdriver.remote.webelement import WebElement
 
 
 class Dashboard:
@@ -30,7 +32,7 @@ class Dashboard:
         Click on the provided element, and navigate to www.google.com
     """
 
-    def __init__(self, driver):
+    def __init__(self, driver: WebDriver):
         """
         Creates a new instance of the Dashboard page object.
 
@@ -41,27 +43,27 @@ class Dashboard:
         """
         self._driver = driver
 
-    def clock_in(self):
+    def clock_in(self) -> None:
         """Finds the element to clock in, and sends to _click_and_nav."""
         clock_in_element = self._driver.find_element_by_name('ClockIn')
         self._click_and_nav_away(clock_in_element)
 
-    def start_lunch(self):
+    def start_lunch(self) -> None:
         """Finds the element to start lunch, and sends to _click_and_nav."""
         start_lunch_element = self._driver.find_element_by_name('StartLunch')
         self._click_and_nav_away(start_lunch_element)
 
-    def end_lunch(self):
+    def end_lunch(self) -> None:
         """Finds the element to end lunch, and sends to _click_and_nav."""
         end_lunch_element = self._driver.find_element_by_name('EndLunch')
         self._click_and_nav_away(end_lunch_element)
 
-    def clock_out(self):
+    def clock_out(self) -> None:
         """Finds the element to clock out, and sends to _click_and_nav."""
         clock_out_element = self._driver.find_element_by_name('ClockOut')
         self._click_and_nav_away(clock_out_element)
 
-    def go_to_pto(self):
+    def go_to_pto(self) -> PaidTimeOff:
         """
         Will navigate to the page with the table of PTO approvals.
 
@@ -74,7 +76,7 @@ class Dashboard:
         self._driver.find_element_by_xpath(path).click()
         return PaidTimeOff(self._driver)
 
-    def _click_and_nav_away(self, element):
+    def _click_and_nav_away(self, element: WebElement) -> None:
         """Clicks on provided element and navigates away from Paylocity.
 
         The only reason to navigate away from Paylocity is to simulate logging

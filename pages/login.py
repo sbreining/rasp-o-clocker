@@ -1,4 +1,6 @@
+from config import Config
 from .question import Question
+from selenium.webdriver.chrome.webdriver import WebDriver
 from selenium.webdriver.common.keys import Keys
 
 
@@ -19,7 +21,7 @@ class Login:
         Enter the credentials into the needed fields and login.
     """
 
-    def __init__(self, config, driver):
+    def __init__(self, config: Config, driver: WebDriver):
         """
         Creates a new instance of the PaidTimeOff page object.
 
@@ -34,7 +36,7 @@ class Login:
         self._config = config
         self._driver = driver
 
-    def login(self):
+    def login(self) -> Question:
         """
         Locates text boxes for credentials and sends keys to login.
 

@@ -1,5 +1,7 @@
+from config import Config
 from .dashboard import Dashboard
 from selenium.common.exceptions import NoSuchElementException
+from selenium.webdriver.chrome.webdriver import WebDriver
 from selenium.webdriver.common.keys import Keys
 
 
@@ -30,7 +32,7 @@ class Question:
         Determines which question it is, and answers accordingly.
     """
 
-    def __init__(self, config, driver):
+    def __init__(self, config: Config, driver: WebDriver):
         """
         Creates a new instance of the Question page object.
 
@@ -45,7 +47,7 @@ class Question:
         self._config = config
         self._driver = driver
 
-    def is_on_question_page(self):
+    def is_on_question_page(self) -> bool:
         """
         Returns true if the browser landed on the question page.
         
@@ -63,7 +65,7 @@ class Question:
 
         return False
 
-    def answer_question(self):
+    def answer_question(self) -> Dashboard:
         """
         Answers the secret question to continue to the Dashboard.
 

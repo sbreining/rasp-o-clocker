@@ -1,5 +1,6 @@
 from datetime import datetime
 from datetime import timedelta
+from selenium.webdriver.chrome.webdriver import WebDriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as ec
@@ -30,7 +31,7 @@ class PaidTimeOff:
         Navigates to the PTO page.
     """
 
-    def __init__(self, driver):
+    def __init__(self, driver: WebDriver):
         """
         Creates a new instance of the PaidTimeOff page object.
 
@@ -41,7 +42,7 @@ class PaidTimeOff:
         """
         self._driver = driver
 
-    def is_pto_day(self, date):
+    def is_pto_day(self, date: datetime) -> bool:
         """
         Determines if `date` is the same day as a requested PTO day. It will
         return true if the date is an _approved_ PTO day.
@@ -65,7 +66,7 @@ class PaidTimeOff:
         return is_pto
 
     @staticmethod
-    def _determine_date_is_pto(nearest_pto, date):
+    def _determine_date_is_pto(nearest_pto: list, date: datetime) -> bool:
         """
         This private function analyzes the row passed in to see if the given
         date is an approved PTO day.
@@ -98,7 +99,7 @@ class PaidTimeOff:
 
         return first_date <= date <= end_day
 
-    def _get_pto_row(self):
+    def _get_pto_row(self) -> list:
         """
         Returns an array based on column of each value in the last row.
 
@@ -118,7 +119,7 @@ class PaidTimeOff:
         rows = table.text.split('\n')
         return rows.pop().split(' ')
 
-    def _navigate_back_to_dash(self):
+    def _navigate_back_to_dash(self) -> None:
         """Returns back to the dashboard page."""
         self._driver.find_element_by_class_name('unav-main-menu-title').click()
 
