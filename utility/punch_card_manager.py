@@ -1,5 +1,5 @@
 from datetime import date, datetime, timedelta
-from utility import *
+from utility import Holiday, Punch
 from random import randint
 from selenium.common.exceptions import NoSuchElementException
 import pages
@@ -69,7 +69,7 @@ class PunchCardManager:
         self._holiday = Holiday(args['database'])
         self._punch = Punch(args['database'])
 
-    def start(self):
+    def start(self) -> None:
         """This function runs the show, making everything mesh together."""
         if self._punch.get_most_recent_day() is None:
             self._punch.insert_new_day()
@@ -101,7 +101,7 @@ class PunchCardManager:
 
             time.sleep(60)
 
-    def _login_to_paylocity(self):
+    def _login_to_paylocity(self) -> Dashboard:
         """
         This function logs into Paylocity and bypasses the secret question
         page if that pops up.
@@ -121,7 +121,7 @@ class PunchCardManager:
 
         return question_page.answer_question()
 
-    def _is_clock_in_day(self, now):
+    def _is_clock_in_day(self, now: datetime) -> bool:
         """
         This function determines whether today is a day to clock in or not. It
         will do so by checking if it is a weekend, company holiday, or a
@@ -146,8 +146,8 @@ class PunchCardManager:
         self._punch.update_is_work_day(is_clock_day)
 
         return is_clock_day
-    
-    def _check_resources(self, now):
+
+    def _check_resources(self, now: datetime) -> bool:
         """
         This method validates against the various resources if this is an
         appropriate day to clock in or not. It starts with the day of the week
@@ -163,7 +163,8 @@ class PunchCardManager:
         Returns
         -------
         bool
-            False on a day which is not supposed to clock in and out, True otherwise.
+            False on a day which is not supposed to clock in and out, True
+            otherwise.
         """
         if now.weekday() > 5 or self._holiday.is_holiday(now):
             print('It is a weekend or holiday, skipping!')
@@ -178,7 +179,11 @@ class PunchCardManager:
         print('It is not a weekend, holiday, or PTO day.')
         return True
 
-    def _perform_action(self, action_str, time_of_action, db_action):
+    def _perform_action(self,
+        action_str: str,
+        time_of_action: datetime,
+        db_action: callable
+    ) -> None:
         """
         This function handles the action and error handling for each punch
         for the day. It will alert if anything is at critical. Currently, even
@@ -205,14 +210,23 @@ class PunchCardManager:
         }
         try:
             action[action_str]()
-            self._pager.info('%s at %s' % (action_str, time_of_action.strftime('%c')))
+            self._pager.info(
+                '%s at %s' % (action_str, time_of_action.strftime('%c'))
+            )
         except NoSuchElementException:
             self._pager.alert('Did not %s successfully.' % action_str)
 
         if not db_action(time_of_action):
             self._pager.warning('Did not log %s to database' % action_str)
 
-    def _should_punch(self, punch_card, prev_punch_pos, cur_punch_pos, now, delta):
+    def _should_punch(
+        self,
+        punch_card: tuple,
+        prev_punch_pos: int,
+        cur_punch_pos: int,
+        now: datetime,
+        delta: timedelta
+    ) -> bool:
         """
         This function takes the ID of the punch, and the position desired for
         clocking in and out.
@@ -251,7 +265,7 @@ class PunchCardManager:
         return now - last_punch > delta
 
     @staticmethod
-    def _get_datetime_from_date_string(date_str):
+    def _get_datetime_from_date_string(date_str: str) -> datetime:
         """
         Converts a string from given format into a datetime object.
 
