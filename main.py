@@ -7,7 +7,7 @@ from sys import exc_info
 from utility import Database, PagerDuty, PunchCardManager
 
 
-def main():
+def main() -> None:
     # Load up environment configuration
     load_dotenv(join(dirname(__file__), './.env'))
     config = Config()

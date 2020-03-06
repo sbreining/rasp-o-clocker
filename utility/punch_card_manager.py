@@ -1,8 +1,8 @@
 from datetime import date, datetime, timedelta
+from pages import Dashboard, Login
 from utility import Holiday, Punch
 from random import randint
 from selenium.common.exceptions import NoSuchElementException
-import pages
 import time
 
 
@@ -112,12 +112,12 @@ class PunchCardManager:
             The Dashboard page object.
         """
         # The sequence of steps below is contingent on the time.
-        login_page = pages.Login(self._config, self._driver)
+        login_page = Login(self._config, self._driver)
         question_page = login_page.login()
 
         # The login might've gone straight to the dashboard
         if not question_page.is_on_question_page():
-            return pages.Dashboard(self._driver)
+            return Dashboard(self._driver)
 
         return question_page.answer_question()
 
@@ -179,7 +179,8 @@ class PunchCardManager:
         print('It is not a weekend, holiday, or PTO day.')
         return True
 
-    def _perform_action(self,
+    def _perform_action(
+        self,
         action_str: str,
         time_of_action: datetime,
         db_action: callable
