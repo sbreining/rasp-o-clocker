@@ -1,6 +1,7 @@
 import sqlite3
 from datetime import datetime
 from calendar import month_name
+from utility import Database
 
 
 class Holiday:
@@ -26,7 +27,7 @@ class Holiday:
         Removes a holiday from the database.
     """
 
-    def __init__(self, connection):
+    def __init__(self, connection: Database):
         """
         Creates a new instance of the Holiday model object.
 
@@ -37,7 +38,7 @@ class Holiday:
         """
         self._connection = connection
     
-    def add_holiday(self, date):
+    def add_holiday(self, date: datetime) -> int:
         """
         Adds a record to the database to create a holiday.
 
@@ -63,7 +64,7 @@ class Holiday:
 
         return self._connection.get_last_row_id()
     
-    def get_row_id_by_date(self, date):
+    def get_row_id_by_date(self, date: datetime) -> int:
         """
         Finds the date in the database and returns the row ID.
 
@@ -82,10 +83,9 @@ class Holiday:
 
         try:
             self._connection.execute(sql, data)
+            row = self._connection.fetchall()[0]
         except sqlite3.OperationalError:
             return -1
-        
-        row = self._connection.fetchall()[0]
 
         return row[0]
 
@@ -105,13 +105,17 @@ class Holiday:
         """
         sql = 'SELECT * FROM holidays WHERE month=? AND day=? AND year=?;'
         data = (month_name[date.month], date.day, date.year,)
-        self._connection.execute(sql, data)
 
-        data = self._connection.fetchall()
+        try:
+            self._connection.execute(sql, data)
+            data = self._connection.fetchall()
+        except sqlite3.OperationalError:
+            # In this case we'll just consider it a holiday and not clock
+            return True
 
         return len(data) != 0
 
-    def remove_holiday(self, record_id):
+    def remove_holiday(self, record_id: int) -> bool:
         """
         Removes the record belonging to the given ID that is passed in.
 
