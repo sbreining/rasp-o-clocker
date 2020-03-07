@@ -1,3 +1,4 @@
+from config import Config
 from smtplib import SMTP_SSL
 
 
@@ -33,7 +34,7 @@ class PagerDuty:
         Sends an info message for record keeping
     """
 
-    def __init__(self, config):
+    def __init__(self, config: Config):
         """
         Creates a new instance of the PagerDuty object.
 
@@ -48,7 +49,7 @@ class PagerDuty:
         self._password = pager_duty_info['password']
         self._to = pager_duty_info['to']
 
-    def _page(self, level, message):
+    def _page(self, level: str, message: str) -> None:
         """
         This method signs into the Google server, and send the text message
         to the provided phone number.
@@ -61,15 +62,15 @@ class PagerDuty:
         message: string, required
             The message to be sent which is the core of the information.
         """
-        self._server = SMTP_SSL('smtp.gmail.com', 465)
-        self._server.login(self._from.split('@')[0], self._password)
+        server = SMTP_SSL('smtp.gmail.com', 465)
+        server.login(self._from.split('@')[0], self._password)
 
-        body = 'Level - ' + level + '\nMessage - ' + message
-        self._server.sendmail(self._from, self._to, body)
+        body = 'Level - %s\nMessage - %s' % (level, message)
+        server.sendmail(self._from, self._to, body)
 
-        self._server.quit()
+        server.quit()
 
-    def alert(self, message):
+    def alert(self, message: str) -> None:
         """
         Sends an ALERT message out for when things go wrong.
 
@@ -80,7 +81,7 @@ class PagerDuty:
         """
         self._page('ALERT', message)
 
-    def warning(self, message):
+    def warning(self, message: str) -> None:
         """
         Sends an WARNING message out for when things go wrong, but do
         warrant immediate action.
@@ -92,7 +93,7 @@ class PagerDuty:
         """
         self._page('WARNING', message)
 
-    def info(self, message):
+    def info(self, message: str) -> None:
         """
         Sends an INFO message out for when things go fine.
 

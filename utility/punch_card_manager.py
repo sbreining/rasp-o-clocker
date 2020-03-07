@@ -52,7 +52,7 @@ class PunchCardManager:
         Gets the column from the punches table to compare datetimes.
     """
 
-    def __init__(self, args):
+    def __init__(self, args: dict):
         """
         Instantiates the punch card manager instance.
 

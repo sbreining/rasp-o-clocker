@@ -1,3 +1,4 @@
+from config import Config
 import sqlite3
 
 
@@ -36,7 +37,7 @@ class Database:
         On an insert, this will return the new row id if applicable.
     """
 
-    def __init__(self, config):
+    def __init__(self, config: Config):
         """
         Creates a new instance of the Database object.
 
@@ -51,11 +52,11 @@ class Database:
         )
         self._cursor = self._db.cursor()
     
-    def commit(self):
+    def commit(self) -> None:
         """Commits the database transactions."""
         self._db.commit()
 
-    def execute(self, sql, data=()):
+    def execute(self, sql: str, data=()) -> None:
         """
         Executes the provided sql statement with the given data.
 
@@ -69,7 +70,7 @@ class Database:
         """
         self._cursor.execute(sql, data)
 
-    def fetchall(self):
+    def fetchall(self) -> list:
         """
         After executing the query, this will return the data.
 
@@ -80,7 +81,7 @@ class Database:
         """
         return self._cursor.fetchall()
 
-    def fetchone(self):
+    def fetchone(self) -> any:
         """
         After executing the query, this will return the data.
 
@@ -91,7 +92,7 @@ class Database:
         """
         return self._cursor.fetchone()
     
-    def get_last_row_id(self):
+    def get_last_row_id(self) -> any:
         """
         Will return the last row id, generally used after an insert
 
