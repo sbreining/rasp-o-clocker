@@ -1,4 +1,5 @@
-from datetime import date
+from utility import Database
+from datetime import date, datetime
 import sqlite3
 
 
@@ -43,7 +44,7 @@ class Punch:
         This private method handles updating the punches for the day.
     """
 
-    def __init__(self, connection):
+    def __init__(self, connection: Database):
         """
         Creates a new instance of the Punch model object.
 
@@ -54,7 +55,7 @@ class Punch:
         """
         self._connection = connection
 
-    def get_punch_by_id(self, id_):
+    def get_punch_by_id(self, id_: int) -> tuple:
         """
         Retrieves the punch row by the id.
 
@@ -78,13 +79,13 @@ class Punch:
 
         return self._connection.fetchone()
 
-    def in_(self, datetime):
+    def in_(self, datetime_obj: datetime) -> bool:
         """
         Will insert a new row with the datetime provided as the punch in.
 
         Parameters
         ----------
-        datetime : datetime, required
+        datetime_obj : datetime, required
             The datetime to record the punch in.
 
         Returns
@@ -93,15 +94,15 @@ class Punch:
             True on successful insert.
         """
         sql = 'UPDATE punches SET clock_in=? WHERE id=?'
-        return self._update_punch(datetime, sql)
+        return self._update_punch(datetime_obj, sql)
 
-    def start(self, datetime):
+    def start(self, datetime_obj: datetime) -> bool:
         """
         Will update the row for the time that lunch started.
 
         Parameters
         ----------
-        datetime : datetime, required
+        datetime_obj : datetime, required
             The datetime to record the start of lunch.
 
         Returns
@@ -110,15 +111,15 @@ class Punch:
             True on successful update.
         """
         sql = 'UPDATE punches SET lunch_start=? WHERE id=?'
-        return self._update_punch(datetime, sql)
+        return self._update_punch(datetime_obj, sql)
 
-    def end(self, datetime):
+    def end(self, datetime_obj: datetime) -> bool:
         """
         Will update the row for the time that lunch ended.
 
         Parameters
         ----------
-        datetime : datetime, required
+        datetime_obj : datetime, required
             The datetime to record the end of lunch.
 
         Returns
@@ -127,15 +128,15 @@ class Punch:
             True on successful update.
         """
         sql = 'UPDATE punches SET lunch_end=? WHERE id=?'
-        return self._update_punch(datetime, sql)
+        return self._update_punch(datetime_obj, sql)
 
-    def out(self, datetime):
+    def out(self, datetime_obj: datetime) -> bool:
         """
         Will update the row for the time that the day ended.
 
         Parameters
         ----------
-        datetime : datetime, required
+        datetime_obj : datetime, required
             The datetime to record the day is done.
 
         Returns
@@ -144,9 +145,9 @@ class Punch:
             True on successful update.
         """
         sql = 'UPDATE punches SET clock_out=? WHERE id=?'
-        return self._update_punch(datetime, sql)
+        return self._update_punch(datetime_obj, sql)
 
-    def insert_new_day(self):
+    def insert_new_day(self) -> bool:
         """
         Adds a new day to the datatable for tracking if there needs punches or
         for skipping the day entirely.
@@ -167,7 +168,7 @@ class Punch:
 
         return True
 
-    def get_most_recent_day(self):
+    def get_most_recent_day(self) -> tuple:
         """
         This will return the last row inserted into the table.
 
@@ -185,11 +186,11 @@ class Punch:
         
         return self._connection.fetchone()
 
-    def is_work_day(self):
+    def is_work_day(self) -> bool:
         """Returns whether today is a work day or not."""
         return self.get_most_recent_day()[2]
 
-    def update_is_work_day(self, is_work_day):
+    def update_is_work_day(self, is_work_day: bool) -> bool:
         """
         This will update the punch day to avoid checking if we need to clock in
         and out but only once based on weekends, holidays, or PTO days.
@@ -204,7 +205,6 @@ class Punch:
         bool
             True on successful update, False otherwise.
         """
-
         sql = 'UPDATE punches SET is_work_day=? WHERE id=?'
         data = (is_work_day, self.get_most_recent_day()[0],)
 
@@ -216,14 +216,14 @@ class Punch:
 
         return True
 
-    def _update_punch(self, datetime, sql):
+    def _update_punch(self, datetime_obj: datetime, sql: str) -> bool:
         """
         Will run the given sql with the datetime, updating the most recently
         inserted row in the table for the given punch, passed in via the sql.
 
         Parameters
         ----------
-        datetime : datetime, required
+        datetime_obj : datetime, required
             The date to insert into the column.
 
         sql : string, required
@@ -235,7 +235,7 @@ class Punch:
             True on successful update, false otherwise.
         """
         id_ = self.get_most_recent_day()[0]
-        data = (datetime, id_,)
+        data = (datetime_obj, id_,)
 
         try:
             self._connection.execute(sql, data)
