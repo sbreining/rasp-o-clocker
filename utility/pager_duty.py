@@ -2,6 +2,10 @@ from config import Config
 from smtplib import SMTP_SSL
 
 
+GMAIL_DOMAIN = 'smtp.gmail.com'
+GMAIL_PORT = 465
+
+
 class PagerDuty:
     """A class responsible for pager duty, sending alerts.
 
@@ -64,7 +68,7 @@ class PagerDuty:
         message: string, required
             The message to be sent which is the core of the information.
         """
-        self._email_server.connect('smtp.gmail.com', 465)
+        self._email_server.connect(GMAIL_DOMAIN, GMAIL_PORT)
         self._email_server.login(self._from.split('@')[0], self._password)
 
         body = 'Level - %s\nMessage - %s' % (level, message)

@@ -1,10 +1,12 @@
-from calendar import month_name
 from datetime import datetime
 from random import randint
 from sqlite3 import OperationalError
 from unittest.mock import Mock
-from utility import Holiday
 import pytest
+
+
+# Unit under test
+from utility import Holiday
 
 
 @pytest.fixture()

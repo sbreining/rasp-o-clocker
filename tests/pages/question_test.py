@@ -1,8 +1,12 @@
-from pages import Dashboard, Question
+from pages import Dashboard
 from selenium.common.exceptions import NoSuchElementException
 from selenium.webdriver.common.keys import Keys
 from unittest.mock import call, Mock
 import pytest
+
+
+# Unit under test
+from pages import Question
 
 
 question_text = 'test question'

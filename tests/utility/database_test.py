@@ -1,7 +1,10 @@
-from utility import Database
 from unittest.mock import Mock, patch
 import sqlite3
 import pytest
+
+
+# Unit under test
+from utility import Database
 
 
 cursor = Mock()

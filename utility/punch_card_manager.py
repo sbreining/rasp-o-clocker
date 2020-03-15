@@ -63,11 +63,11 @@ class PunchCardManager:
         """
         self._config = args['config']
         self._driver = args['driver']
+        self._holiday = args['holiday']
         self._pager = args['pager']
+        self._punch = args['punch']
 
         self._start_hour = self._config.get_start_hour()
-        self._holiday = Holiday(args['database'])
-        self._punch = Punch(args['database'])
 
     def start(self) -> None:
         """This function runs the show, making everything mesh together."""

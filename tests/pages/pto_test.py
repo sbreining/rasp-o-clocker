@@ -1,9 +1,12 @@
 from datetime import datetime, timedelta
-from pages import PaidTimeOff
 from unittest.mock import Mock, patch
 from selenium.common.exceptions import TimeoutException
 from selenium.webdriver.support.ui import WebDriverWait
 import pytest
+
+
+# Unit under test
+from pages import PaidTimeOff
 
 
 clickable_element = Mock()

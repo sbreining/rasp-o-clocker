@@ -1,6 +1,10 @@
 from unittest.mock import Mock
-from utility import PagerDuty
 import pytest
+
+
+# Unit under test
+from utility import PagerDuty
+
 
 username = 'some'
 from_email = '%s@email.com' % username

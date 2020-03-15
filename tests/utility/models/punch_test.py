@@ -1,8 +1,11 @@
 from datetime import datetime
 from sqlite3 import OperationalError
 from unittest.mock import call, Mock
-from utility import Punch
 import pytest
+
+
+# Unit under test
+from utility import Punch
 
 
 ALL_BOOLEANS = [(True,), (False,)]

@@ -5,7 +5,8 @@ from selenium.webdriver import Chrome
 from selenium.webdriver.chrome.options import Options
 from smtplib import SMTP_SSL
 from sys import exc_info
-from utility import Database, PagerDuty, PunchCardManager
+from utility import Database, Holiday, PagerDuty, Punch, PunchCardManager
+from utility.pager_duty import GMAIL_DOMAIN
 
 
 def main() -> None:
@@ -16,6 +17,10 @@ def main() -> None:
     # Connect to the database
     db = Database(config)
 
+    # Add the connection to the two models.
+    holiday = Holiday(db)
+    punch = Punch(db)
+
     # Set the options to have chrome be headless
     op = Options()
     op.add_argument('--headless')
@@ -25,20 +30,29 @@ def main() -> None:
     driver.implicitly_wait(config.get_implicit_wait())
 
     # Instantiate the pager
-    smtp = SMTP_SSL('smtp.gmail.com')
+    smtp = SMTP_SSL(GMAIL_DOMAIN)
     pager = PagerDuty(config, smtp)
 
     # Set the args in a dictionary for future use
-    args = {'config': config, 'database': db, 'driver': driver, 'pager': pager}
+    args = {
+        'config': config,
+        'driver': driver,
+        'holiday': holiday,
+        'pager': pager,
+        'punch': punch
+    }
 
-    # Start the process manager
     punch_card_manager = PunchCardManager(args)
 
     try:
+        # Start the process manager
         punch_card_manager.start()
     except:
         exception_type, value = exc_info()[:2]
-        pager.alert('PROGRAM CRASH, needs restart.\nException - %s\nValue - %s' % (exception_type, value))
+        pager.alert(
+            'PROGRAM CRASH, needs restart.\nException - %s\nValue - %s' %
+            (exception_type, value)
+        )
 
 
 if __name__ == "__main__":

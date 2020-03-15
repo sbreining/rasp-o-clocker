@@ -1,6 +1,11 @@
-from pages import Login, Question
+from pages import Question
 from unittest.mock import call, Mock
 from selenium.webdriver.common.keys import Keys
+
+
+# Unit under test
+from pages import Login
+
 
 company_id = "12345"
 username = "username"
