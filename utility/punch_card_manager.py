@@ -179,12 +179,7 @@ class PunchCardManager:
         print('It is not a weekend, holiday, or PTO day.')
         return True
 
-    def _perform_action(
-        self,
-        action_str: str,
-        time_of_action: datetime,
-        db_action: callable
-    ) -> None:
+    def _perform_action(self, action_str: str, time_of_action: datetime, db_action: callable) -> None:
         """
         This function handles the action and error handling for each punch
         for the day. It will alert if anything is at critical. Currently, even
@@ -220,14 +215,7 @@ class PunchCardManager:
         if not db_action(time_of_action):
             self._pager.warning('Did not log %s to database' % action_str)
 
-    def _should_punch(
-        self,
-        punch_card: tuple,
-        prev_punch_pos: int,
-        cur_punch_pos: int,
-        now: datetime,
-        delta: timedelta
-    ) -> bool:
+    def _should_punch(self, punch_card: tuple, prev_punch_pos: int, cur_punch_pos: int, now: datetime, delta: timedelta) -> bool:
         """
         This function takes the ID of the punch, and the position desired for
         clocking in and out.

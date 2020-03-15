@@ -16,7 +16,7 @@ class PagerDuty:
     _to : string
         The text number using e-mail that will receive the alert.
 
-    _server : SMTP_SSL
+    _email_server : SMTP_SSL
         The e-mail server that will be connected to, for sending messages.
 
     Methods
@@ -34,7 +34,7 @@ class PagerDuty:
         Sends an info message for record keeping
     """
 
-    def __init__(self, config: Config):
+    def __init__(self, config: Config, smtp_ssl: SMTP_SSL):
         """
         Creates a new instance of the PagerDuty object.
 
@@ -49,6 +49,8 @@ class PagerDuty:
         self._password = pager_duty_info['password']
         self._to = pager_duty_info['to']
 
+        self._email_server = smtp_ssl
+
     def _page(self, level: str, message: str) -> None:
         """
         This method signs into the Google server, and send the text message
@@ -62,13 +64,13 @@ class PagerDuty:
         message: string, required
             The message to be sent which is the core of the information.
         """
-        server = SMTP_SSL('smtp.gmail.com', 465)
-        server.login(self._from.split('@')[0], self._password)
+        self._email_server.connect('smtp.gmail.com', 465)
+        self._email_server.login(self._from.split('@')[0], self._password)
 
         body = 'Level - %s\nMessage - %s' % (level, message)
-        server.sendmail(self._from, self._to, body)
+        self._email_server.sendmail(self._from, self._to, body)
 
-        server.quit()
+        self._email_server.quit()
 
     def alert(self, message: str) -> None:
         """

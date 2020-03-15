@@ -3,6 +3,7 @@ from dotenv import load_dotenv
 from os.path import join, dirname
 from selenium.webdriver import Chrome
 from selenium.webdriver.chrome.options import Options
+from smtplib import SMTP_SSL
 from sys import exc_info
 from utility import Database, PagerDuty, PunchCardManager
 
@@ -24,7 +25,8 @@ def main() -> None:
     driver.implicitly_wait(config.get_implicit_wait())
 
     # Instantiate the pager
-    pager = PagerDuty(config)
+    smtp = SMTP_SSL('smtp.gmail.com')
+    pager = PagerDuty(config, smtp)
 
     # Set the args in a dictionary for future use
     args = {'config': config, 'database': db, 'driver': driver, 'pager': pager}
