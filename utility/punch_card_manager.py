@@ -36,19 +36,19 @@ class PunchCardManager:
     start()
         Starts the system working.
 
-    _login_to_paylocity()
+    login_to_paylocity()
         Handles the actions of logging into paylocity.
 
-    _is_clock_in_day(now, dashboard_page)
+    is_clock_in_day(now, dashboard_page)
         Returns true if punches are supposed to occur for the day.
 
-    _check_resources(now)
+    check_resources(now)
         This checks day of week, holiday table, and PTO table.
 
-    _perform_action(action, action_str, time_of_action, db_action)
+    perform_action(action, action_str, time_of_action, db_action)
         Performs the punch action based on the time of day.
 
-    _get_punch(punch_id, position)
+    get_punch(punch_id, position)
         Gets the column from the punches table to compare datetimes.
     """
 
@@ -78,30 +78,30 @@ class PunchCardManager:
             punch_card = self._punch.get_most_recent_day()
 
             date_str = '%s 00:00:00.000' % punch_card[1]
-            cur_punch_day = self._get_datetime_from_date_string(date_str).date()
+            cur_punch_day = self.get_datetime_from_date_string(date_str).date()
 
             if date.today() - cur_punch_day >= timedelta(days=1):
                 self._punch.insert_new_day()
 
             now = datetime.now()
 
-            if not self._is_clock_in_day(now):
+            if not self.is_clock_in_day(now):
                 # If it is not a day to clock in, sleep for greater intervals.
                 time.sleep(300)
                 continue
 
             if punch_card[3] is None and now.hour == self._start_hour:
-                self._perform_action('Clock In', now, self._punch.in_)
-            elif self._should_punch(punch_card, 3, 4, now, timedelta(hours=4, minutes=randint(1, 30))):
-                self._perform_action('Start Lunch', now, self._punch.start)
-            elif self._should_punch(punch_card, 4, 5, now, timedelta(minutes=randint(31, 35))):
-                self._perform_action('End Lunch', now, self._punch.end)
-            elif self._should_punch(punch_card, 3, 6, now, timedelta(hours=8, minutes=randint(40, 45))):
-                self._perform_action('Clock Out', now, self._punch.out)
+                self.perform_action('Clock In', now, self._punch.in_)
+            elif self.should_punch(punch_card, 3, 4, now, timedelta(hours=4, minutes=randint(1, 30))):
+                self.perform_action('Start Lunch', now, self._punch.start)
+            elif self.should_punch(punch_card, 4, 5, now, timedelta(minutes=randint(31, 35))):
+                self.perform_action('End Lunch', now, self._punch.end)
+            elif self.should_punch(punch_card, 3, 6, now, timedelta(hours=8, minutes=randint(40, 45))):
+                self.perform_action('Clock Out', now, self._punch.out)
 
             time.sleep(60)
 
-    def _login_to_paylocity(self) -> Dashboard:
+    def login_to_paylocity(self) -> Dashboard:
         """
         This function logs into Paylocity and bypasses the secret question
         page if that pops up.
@@ -121,7 +121,7 @@ class PunchCardManager:
 
         return question_page.answer_question()
 
-    def _is_clock_in_day(self, now: datetime) -> bool:
+    def is_clock_in_day(self, now: datetime) -> bool:
         """
         This function determines whether today is a day to clock in or not. It
         will do so by checking if it is a weekend, company holiday, or a
@@ -141,13 +141,13 @@ class PunchCardManager:
         if determined is not None:
             return determined
 
-        is_clock_day = self._check_resources(now)
+        is_clock_day = self.check_resources(now)
 
         self._punch.update_is_work_day(is_clock_day)
 
         return is_clock_day
 
-    def _check_resources(self, now: datetime) -> bool:
+    def check_resources(self, now: datetime) -> bool:
         """
         This method validates against the various resources if this is an
         appropriate day to clock in or not. It starts with the day of the week
@@ -171,7 +171,7 @@ class PunchCardManager:
             return False
 
         # Separate this if-block because it requires actually logging in.
-        dashboard_page = self._login_to_paylocity()
+        dashboard_page = self.login_to_paylocity()
         if dashboard_page.go_to_pto().is_pto_day(now):
             print('It is a PTO day, skipping!')
             return False
@@ -179,7 +179,7 @@ class PunchCardManager:
         print('It is not a weekend, holiday, or PTO day.')
         return True
 
-    def _perform_action(self, action_str: str, time_of_action: datetime, db_action: callable) -> None:
+    def perform_action(self, action_str: str, time_of_action: datetime, db_action: callable) -> None:
         """
         This function handles the action and error handling for each punch
         for the day. It will alert if anything is at critical. Currently, even
@@ -197,7 +197,7 @@ class PunchCardManager:
         db_action : callback, required
             The action of logging in the database.
         """
-        dashboard = self._login_to_paylocity()
+        dashboard = self.login_to_paylocity()
         action = {
             'Clock In': dashboard.clock_in,
             'Start Lunch': dashboard.start_lunch,
@@ -215,7 +215,7 @@ class PunchCardManager:
         if not db_action(time_of_action):
             self._pager.warning('Did not log %s to database' % action_str)
 
-    def _should_punch(self, punch_card: tuple, prev_punch_pos: int, cur_punch_pos: int, now: datetime, delta: timedelta) -> bool:
+    def should_punch(self, punch_card: tuple, prev_punch_pos: int, cur_punch_pos: int, now: datetime, delta: timedelta) -> bool:
         """
         This function takes the ID of the punch, and the position desired for
         clocking in and out.
@@ -249,12 +249,12 @@ class PunchCardManager:
         if last_punch_str is None:
             return False
 
-        last_punch = self._get_datetime_from_date_string(last_punch_str)
+        last_punch = self.get_datetime_from_date_string(last_punch_str)
 
         return now - last_punch > delta
 
     @staticmethod
-    def _get_datetime_from_date_string(date_str: str) -> datetime:
+    def get_datetime_from_date_string(date_str: str) -> datetime:
         """
         Converts a string from given format into a datetime object.
 
