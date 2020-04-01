@@ -9,4 +9,6 @@ install:
 script:
   - coverage run -m pytest
 
-after_success: coveralls
+after_success:
+  - coverage report --omit=.pytest_cache/*,bin/*,data/*,env/*,htmlcov/*,lib/*,scripts/*,tests/*
+  - coveralls
