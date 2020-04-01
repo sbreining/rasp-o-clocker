@@ -1,6 +1,7 @@
 # Rasp-O-Clocker
 
 [![Build Status](https://travis-ci.org/sbreining/rasp-o-clocker.svg?branch=master)](https://travis-ci.org/sbreining/rasp-o-clocker)
+[![Coverage Status](https://coveralls.io/repos/github/sbreining/rasp-o-clocker/badge.svg?branch=master)](https://coveralls.io/github/sbreining/rasp-o-clocker?branch=master)
 
 This project was started in an attempt to gain familiarity with different tools.
 The first was to expand my knowledge of, and practice using Python. Further, it
