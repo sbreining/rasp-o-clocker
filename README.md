@@ -1,5 +1,7 @@
 # Rasp-O-Clocker
 
+[![Build Status](https://travis-ci.org/sbreining/rasp-o-clocker.svg?branch=master)](https://travis-ci.org/sbreining/rasp-o-clocker)
+
 This project was started in an attempt to gain familiarity with different tools.
 The first was to expand my knowledge of, and practice using Python. Further, it
 was to learn about virtual environments, incorporating other packages into my
