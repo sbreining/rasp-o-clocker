@@ -108,12 +108,12 @@ class Holiday:
 
         try:
             self._connection.execute(sql, data)
-            data = self._connection.fetchall()
+            results = self._connection.fetchall()
         except sqlite3.OperationalError:
             # In this case we'll just consider it a holiday and not clock
             return True
 
-        return len(data) != 0
+        return len(results) != 0
 
     def remove_holiday(self, record_id: int) -> bool:
         """

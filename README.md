@@ -3,7 +3,14 @@
 This project was started in an attempt to gain familiarity with different tools.
 The first was to expand my knowledge of, and practice using Python. Further, it
 was to learn about virtual environments, incorporating other packages into my
-own project, and automating a redundant task.
+own project, and automating a redundant task. Additionally, I utilized SQLite,
+an RDBMS to help manage clock punches and help resume in the event of an
+application crash. I also incorporated (insecurely) a sort of pager system that
+utilizes a GMail account to forward a text notifying of events occurring. This
+way, if something got missed, or the application crashed, it could manually be
+updated. Lastly, this was merely a learning process and not a tool that was ever
+used. I happened to be promoted before it even could be used.
+
 
 ### Installation
 
@@ -22,9 +29,9 @@ that needs to be adjusted, added, or otherwise is up to you.
 
 `python main.py`
 
-The idea is to run this with a process manager (like `supervisord`) to ensure it
-stays running on hardware that can stay active. My intended device was a
-raspberry pi, hence the name `Rasp-O-Clocker`.
+The idea is to run this with a process manager to ensure it stays running on
+hardware that can stay active. My intended device was a raspberry pi, hence the
+name `Rasp-O-Clocker`.
 
 ### Testing
 
