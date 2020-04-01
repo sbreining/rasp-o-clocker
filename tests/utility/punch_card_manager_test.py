@@ -1,5 +1,6 @@
 from datetime import datetime, timedelta
 from pages import Dashboard, Login
+from selenium.common.exceptions import NoSuchElementException
 from unittest.mock import Mock, patch
 import pytest
 
@@ -245,4 +246,181 @@ def test_login_to_paylocity_calls_answer_question(args):
         actual = pcm.login_to_paylocity()
 
     question_page.answer_question.assert_called_once()
+    assert actual is expected
+
+
+@pytest.mark.parametrize(
+    'work_day_return,resource_return',
+    [(True,None), (False,None), (None,True), (None,False)]
+)
+def test_is_clock_in_day_returns_bool(args, work_day_return, resource_return):
+    punch = Mock()
+    punch.is_work_day = Mock(return_value=work_day_return)
+    punch.update_is_work_day = Mock()
+
+    args['punch'] = punch
+
+    now = datetime.now()
+
+    pcm = PunchCardManager(args)
+    pcm.check_resources = Mock(return_value=resource_return)
+
+    actual = pcm.is_clock_in_day(now)
+
+    if work_day_return is None:
+        pcm.check_resources.assert_called_once_with(now)
+        punch.update_is_work_day.assert_called_once_with(resource_return)
+        assert actual is resource_return
+    else:
+        pcm.check_resources.assert_not_called()
+        punch.update_is_work_day.assert_not_called()
+        assert actual is work_day_return
+
+
+@pytest.mark.parametrize(
+    'date_str',
+    [
+        '2020-03-19',  # Friday
+        '2020-03-21',  # Saturday
+        '2020-03-22'   # Sunday
+    ]
+)
+def test_check_resources_returns_false_for_weekend_or_holiday(args, date_str):
+    holiday = Mock()
+    holiday.is_holiday = Mock(return_value=True)
+
+    args['holiday'] = holiday
+
+    date = datetime.strptime(date_str, '%Y-%m-%d')
+
+    pcm = PunchCardManager(args)
+    pcm.login_to_paylocity = Mock()
+
+    actual = pcm.check_resources(date)
+
+    pcm.login_to_paylocity.assert_not_called()
+    assert actual is False
+
+
+@pytest.mark.parametrize('is_pto_day_return', [(True,), (False,)])
+def test_check_resources_returns_based_on_pto(args, is_pto_day_return):
+    pto_mock = Mock()
+    pto_mock.is_pto_day = Mock(return_value=is_pto_day_return)
+
+    dash_mock = Mock()
+    dash_mock.go_to_pto = Mock(return_value=pto_mock)
+
+    holiday = Mock()
+    holiday.is_holiday = Mock(return_value=False)
+
+    args['holiday'] = holiday
+
+    pcm = PunchCardManager(args)
+    pcm.login_to_paylocity = Mock(return_value=dash_mock)
+
+    now = Mock()
+    now.weekday = Mock(return_value=3)  # Number is arbitrary, but less than 5
+
+    actual = pcm.check_resources(now)
+
+    assert actual is not is_pto_day_return
+
+
+@pytest.fixture()
+def dashboard():
+    dashboard = Mock()
+    dashboard.clock_in = Mock()
+    dashboard.start_lunch = Mock()
+    dashboard.end_lunch = Mock()
+    dashboard.clock_out = Mock()
+
+    return dashboard
+
+
+@pytest.mark.parametrize('dash_fn', [
+    'Clock In',
+    'Start Lunch',
+    'End Lunch',
+    'Clock Out'
+])
+def test_perform_action_calls_dashboard_function(args, dashboard, dash_fn):
+    pager = Mock()
+    pager.info = Mock()
+
+    args['pager'] = pager
+
+    pcm = PunchCardManager(args)
+    pcm.login_to_paylocity = Mock(return_value=dashboard)
+
+    db_fn = lambda time: True
+
+    now = datetime.now()
+
+    pcm.perform_action(dash_fn, now, db_fn)
+
+    info_msg = '%s at %s' % (dash_fn, now.strftime('%c'))
+    pager.info.assert_called_once_with(info_msg)
+
+
+def test_perform_action_calls_raises_and_alerts(args, dashboard):
+    dashboard.clock_in.side_effect = NoSuchElementException()
+
+    pager = Mock()
+    pager.alert = Mock()
+
+    args['pager'] = pager
+
+    pcm = PunchCardManager(args)
+    pcm.login_to_paylocity = Mock(return_value=dashboard)
+
+    db_fn = lambda time: True
+
+    pcm.perform_action('Clock In', datetime.now(), db_fn)
+
+    alert_message = 'Did not Clock In successfully.'
+    pager.alert.assert_called_once_with(alert_message)
+
+
+def test_perform_action_calls_fails_db_and_warns(args, dashboard):
+    pager = Mock()
+    pager.warning = Mock()
+
+    args['pager'] = pager
+
+    pcm = PunchCardManager(args)
+    pcm.login_to_paylocity = Mock(return_value=dashboard)
+
+    db_fn = lambda time: False
+
+    pcm.perform_action('Clock In', datetime.now(), db_fn)
+
+    alert_message = 'Did not log Clock In to database'
+    pager.warning.assert_called_once_with(alert_message)
+
+
+def test_should_punch_returns_false_for_existing_punch(args):
+    pcm = PunchCardManager(args)
+    actual = pcm.should_punch(('Not none',), 0, 0, datetime.now(), timedelta(days=1))
+
+    assert actual is False
+
+
+def test_should_punch_returns_false_is_previous_punch_missing(args):
+    punch_card = (None, None)
+    pcm = PunchCardManager(args)
+    actual = pcm.should_punch(punch_card, 0, 1, datetime.now(), timedelta(days=1))
+
+    assert actual is False
+
+
+@pytest.mark.parametrize('expected', [True, False])
+def test_should_punch_returns_boolean_satisfying_delta_logic(args, expected):
+    now = datetime.now()
+    earlier = now - timedelta(hours=2) if expected else now - timedelta(minutes=10)
+    earlier_str = earlier.strftime('%Y-%m-%d %H:%M:%S.%f')
+
+    punch_card = (earlier_str, None)
+    pcm = PunchCardManager(args)
+    actual = pcm.should_punch(punch_card, 0, 1, now, timedelta(hours=1))
+
     assert actual is expected

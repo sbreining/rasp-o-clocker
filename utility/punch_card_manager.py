@@ -170,14 +170,9 @@ class PunchCardManager:
             print('It is a weekend or holiday, skipping!')
             return False
 
-        # Separate this if-block because it requires actually logging in.
+        # If it is not holiday or weekend, check PTO.
         dashboard_page = self.login_to_paylocity()
-        if dashboard_page.go_to_pto().is_pto_day(now):
-            print('It is a PTO day, skipping!')
-            return False
-
-        print('It is not a weekend, holiday, or PTO day.')
-        return True
+        return not dashboard_page.go_to_pto().is_pto_day(now)
 
     def perform_action(self, action_str: str, time_of_action: datetime, db_action: callable) -> None:
         """
