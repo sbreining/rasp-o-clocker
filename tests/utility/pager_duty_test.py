@@ -50,3 +50,16 @@ def test_log_levels(log_level):
 
     # Parameterized test needs the calls to be reset.
     smtp.reset_mock()
+
+
+def test_output_to_console_without_email_credentials():
+    empty_info = {'from': '', 'password': '', 'to': ''}
+    config.get_pager_duty_info.return_value = empty_info
+
+    pd = PagerDuty(config, smtp)
+    pd.info('Random message')
+
+    smtp.connect.assert_not_called()
+    smtp.login.assert_not_called()
+    smtp.sendmail.assert_not_called()
+    smtp.quit.assert_not_called()

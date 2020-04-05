@@ -55,6 +55,11 @@ class PagerDuty:
 
         self._email_server = smtp_ssl
 
+        self._has_email_credentials = True
+
+        if not self._from or not self._password or not self._to:
+            self._has_email_credentials = False
+
     def _page(self, level: str, message: str) -> None:
         """
         This method signs into the Google server, and send the text message
@@ -68,12 +73,14 @@ class PagerDuty:
         message: string, required
             The message to be sent which is the core of the information.
         """
+        body = 'Level - %s\nMessage - %s' % (level, message)
+        if not self._has_email_credentials:
+            print(body)
+            return
+
         self._email_server.connect(GMAIL_DOMAIN, GMAIL_PORT)
         self._email_server.login(self._from.split('@')[0], self._password)
-
-        body = 'Level - %s\nMessage - %s' % (level, message)
         self._email_server.sendmail(self._from, self._to, body)
-
         self._email_server.quit()
 
     def alert(self, message: str) -> None:
