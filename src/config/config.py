@@ -93,7 +93,7 @@ class Config:
         -------
         string
         """
-        return join(dirname(__file__), '../../data/database.db')
+        return join(dirname(__file__), '..', '..', 'data', 'database.db')
 
     @staticmethod
     def get_questions() -> dict:

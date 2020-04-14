@@ -3,7 +3,7 @@ import pytest
 
 
 # Unit under test
-from utility import PagerDuty
+from src.utility import PagerDuty
 
 
 username = 'some'

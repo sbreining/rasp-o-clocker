@@ -1,10 +1,10 @@
-from pages import Question
+from src.pages import Question
 from unittest.mock import call, Mock
 from selenium.webdriver.common.keys import Keys
 
 
 # Unit under test
-from pages import Login
+from src.pages import Login
 
 
 company_id = "12345"

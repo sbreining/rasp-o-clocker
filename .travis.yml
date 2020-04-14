@@ -10,5 +10,5 @@ script:
   - coverage run --source=config,pages,utility -m pytest
 
 after_success:
-  - coverage report --omit=.pytest_cache/*,bin/*,data/*,env/*,htmlcov/*,lib/*,scripts/*,tests/*
+  - coverage report --omit=**/__init__.py,.pytest_cache/*,bin/*,data/*,env/*,htmlcov/*,lib/*,scripts/*,tests/*
   - coveralls

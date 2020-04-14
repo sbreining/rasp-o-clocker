@@ -1,17 +1,21 @@
-.coverage
+# Keep the .gitignore alphabetical, with symbols coming before alpha-characters.
+# Also, any full folders that should be ignored should come before specific
+# files.
 
-.env
-
+### Folders ###
 .idea/
+
+**/__pycache__/
 
 bin/
 
-data/
+env/
 
 htmlcov/
 
-env/
-
 lib/
 
-**/__pycache__
+### Files ###
+.coverage
+data/.env
+data/database.db

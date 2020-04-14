@@ -1,8 +1,8 @@
 from datetime import date, datetime, timedelta
-from pages import Dashboard, Login
+from src.pages import Dashboard, Login
 from random import randint
 from selenium.common.exceptions import NoSuchElementException
-from utility import Holiday, Punch
+from src.utility import Holiday, Punch
 import time
 
 

@@ -1,4 +1,4 @@
-from config import Config
+from src.config import Config
 from smtplib import SMTP_SSL
 
 

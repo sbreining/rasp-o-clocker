@@ -6,7 +6,7 @@ import pytest
 
 
 # Unit under test
-from pages import PaidTimeOff
+from src.pages import PaidTimeOff
 
 
 clickable_element = Mock()

@@ -1,17 +1,16 @@
-from config import Config
+from src.config import Config
 from dotenv import load_dotenv
 from os.path import join, dirname
 from selenium.webdriver import Chrome
 from selenium.webdriver.chrome.options import Options
 from smtplib import SMTP_SSL
 from sys import exc_info
-from utility import Database, Holiday, PagerDuty, Punch, PunchCardManager
-from utility.pager_duty import GMAIL_DOMAIN
+from src.utility import Database, Holiday, PagerDuty, Punch, PunchCardManager, GMAIL_DOMAIN
 
 
 def main() -> None:
     # Load up environment configuration
-    load_dotenv(join(dirname(__file__), './.env'))
+    load_dotenv(join(dirname(__file__), 'data', '.env'))
     config = Config()
 
     # Connect to the database

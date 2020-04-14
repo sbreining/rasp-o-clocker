@@ -22,7 +22,7 @@ used. I happened to be promoted before it even could be used.
 1. Clone the repo: `git clone https://github.com/sbreining/rasp-o-clocker.git`
 2. Navigate into directory: `cd rasp-o-clocker`
 3. Install dependencies: `pip install`
-4. Copy environment sample: `cp .env.sample .env`
+4. Copy environment sample: `cp data/.env.sample data/.env`
 5. Fill in any necessary information in the `.env` file you just created.
 6. Run migration: `python scripts/migrate`
 

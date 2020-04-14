@@ -1,4 +1,4 @@
-from config import Config
+from src.config import Config
 from .dashboard import Dashboard
 from selenium.common.exceptions import NoSuchElementException
 from selenium.webdriver.chrome.webdriver import WebDriver

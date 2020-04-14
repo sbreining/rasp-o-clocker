@@ -1,4 +1,4 @@
-from config import Config
+from src.config import Config
 from .question import Question
 from selenium.webdriver.chrome.webdriver import WebDriver
 from selenium.webdriver.common.keys import Keys

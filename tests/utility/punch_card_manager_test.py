@@ -1,12 +1,12 @@
 from datetime import datetime, timedelta
-from pages import Dashboard, Login
+from src.pages import Dashboard, Login
 from selenium.common.exceptions import NoSuchElementException
 from unittest.mock import Mock, patch
 import pytest
 
 
 # Unit under test
-from utility import PunchCardManager
+from src.utility import PunchCardManager
 
 
 START_HOUR = 8

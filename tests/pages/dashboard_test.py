@@ -1,10 +1,10 @@
-from pages import PaidTimeOff
+from src.pages import PaidTimeOff
 from unittest.mock import Mock
 import pytest
 
 
 # Unit under test
-from pages import Dashboard
+from src.pages import Dashboard
 
 
 def test_init_returns_instance_of_dashboard():
