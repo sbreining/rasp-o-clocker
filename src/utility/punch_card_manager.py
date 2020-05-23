@@ -2,7 +2,7 @@ from datetime import date, datetime, timedelta
 from src.pages import Dashboard, Login
 from random import randint
 from selenium.common.exceptions import NoSuchElementException
-from src.utility import Holiday, Punch
+from src.database.models import Holiday, Punch
 import time
 
 

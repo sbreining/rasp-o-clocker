@@ -4,7 +4,7 @@ import pytest
 
 
 # Unit under test
-from src.utility import Database
+from src.database import Database
 
 
 cursor = Mock()

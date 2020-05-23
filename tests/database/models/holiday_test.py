@@ -6,7 +6,7 @@ import pytest
 
 
 # Unit under test
-from src.utility import Holiday
+from src.database.models import Holiday
 
 
 @pytest.fixture()

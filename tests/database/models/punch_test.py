@@ -5,7 +5,7 @@ import pytest
 
 
 # Unit under test
-from src.utility import Punch
+from src.database.models import Punch
 
 
 ALL_BOOLEANS = [(True,), (False,)]

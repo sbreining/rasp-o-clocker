@@ -55,10 +55,10 @@ class PagerDuty:
 
         self._email_server = smtp_ssl
 
-        self._has_email_credentials = True
+        self._has_email_credentials = False
 
-        if not self._from or not self._password or not self._to:
-            self._has_email_credentials = False
+        if self._from and self._password and self._to:
+            self._has_email_credentials = True
 
     def _page(self, level: str, message: str) -> None:
         """

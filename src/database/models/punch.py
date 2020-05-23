@@ -1,6 +1,6 @@
-from src.utility import Database
+from src.database import Database
 from datetime import date, datetime
-import sqlite3
+from sqlite3 import OperationalError
 
 
 class Punch:
@@ -74,7 +74,7 @@ class Punch:
 
         try:
             self._connection.execute(sql, data)
-        except sqlite3.OperationalError:
+        except OperationalError:
             return ()
 
         return self._connection.fetchone()
@@ -163,7 +163,7 @@ class Punch:
         try:
             self._connection.execute(sql, data)
             self._connection.commit()
-        except sqlite3.OperationalError:
+        except OperationalError:
             return False
 
         return True
@@ -181,7 +181,7 @@ class Punch:
 
         try:
             self._connection.execute(sql)
-        except sqlite3.OperationalError:
+        except OperationalError:
             return ()
         
         return self._connection.fetchone()
@@ -211,7 +211,7 @@ class Punch:
         try:
             self._connection.execute(sql, data)
             self._connection.commit()
-        except sqlite3.OperationalError:
+        except OperationalError:
             return False
 
         return True
@@ -240,7 +240,7 @@ class Punch:
         try:
             self._connection.execute(sql, data)
             self._connection.commit()
-        except sqlite3.OperationalError:
+        except OperationalError:
             return False
 
         return True

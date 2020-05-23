@@ -1,7 +1,7 @@
-import sqlite3
 from datetime import datetime
 from calendar import month_name
-from src.utility import Database
+from sqlite3 import OperationalError
+from src.database import Database
 
 
 class Holiday:
@@ -58,7 +58,7 @@ class Holiday:
         try:
             self._connection.execute(sql, data)
             self._connection.commit()
-        except sqlite3.OperationalError as exception:
+        except OperationalError as exception:
             print(exception)
             return -1
 
@@ -84,7 +84,7 @@ class Holiday:
         try:
             self._connection.execute(sql, data)
             row = self._connection.fetchall()[0]
-        except sqlite3.OperationalError:
+        except OperationalError:
             return -1
 
         return row[0]
@@ -109,7 +109,7 @@ class Holiday:
         try:
             self._connection.execute(sql, data)
             results = self._connection.fetchall()
-        except sqlite3.OperationalError:
+        except OperationalError:
             # In this case we'll just consider it a holiday and not clock
             return True
 
@@ -135,7 +135,7 @@ class Holiday:
         try:
             self._connection.execute(sql, data)
             self._connection.commit()
-        except sqlite3.OperationalError:
+        except OperationalError:
             print('Could not delete record.')
             return False
         

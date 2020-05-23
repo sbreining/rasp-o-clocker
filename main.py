@@ -1,11 +1,15 @@
-from src.config import Config
 from dotenv import load_dotenv
 from os.path import join, dirname
 from selenium.webdriver import Chrome
 from selenium.webdriver.chrome.options import Options
 from smtplib import SMTP_SSL
+from src.config import Config
+from src.database import Database
+from src.database.models import Holiday, Punch
+from src.gui import MainWindow
+from src.utility import PagerDuty, PunchCardManager, GMAIL_DOMAIN
 from sys import exc_info
-from src.utility import Database, Holiday, PagerDuty, Punch, PunchCardManager, GMAIL_DOMAIN
+import tkinter as tk
 
 
 def main() -> None:
@@ -42,6 +46,12 @@ def main() -> None:
     }
 
     punch_card_manager = PunchCardManager(args)
+
+    root = tk.Tk()
+    app = MainWindow(master=root)
+    app.mainloop()
+
+    # TODO: Remove below this line, make it part of GUI.
 
     try:
         # Start the process manager
