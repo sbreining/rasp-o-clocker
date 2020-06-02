@@ -26,7 +26,7 @@ smtp.sendmail = Mock()
 smtp.quit = Mock()
 
 
-@pytest.mark.parametrize('log_level', ['alert', 'warning', 'info'])
+@pytest.mark.parametrize('log_level', ['alert', 'warning', 'info', 'test'])
 def test_log_levels(log_level):
     pager_message = 'some message'
 
@@ -35,7 +35,8 @@ def test_log_levels(log_level):
     switch = {
         'alert': pd.alert,
         'warning': pd.warning,
-        'info': pd.info
+        'info': pd.info,
+        'test': pd.test
     }
 
     switch[log_level](pager_message)

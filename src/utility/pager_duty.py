@@ -116,3 +116,15 @@ class PagerDuty:
             The message to be sent which is the core of the information.
         """
         self._page('INFO', message)
+
+    def test(self, message: str = 'Test message from e-mail.') -> None:
+        """
+        Sends a TEST message. Generally used to ensure the account
+        is set up correctly.
+
+        Parameters
+        ----------
+        message: string, optional
+            The message to be sent, which has a default string.
+        """
+        self._page('TEST', message)
