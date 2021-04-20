@@ -17,5 +17,6 @@ lib/
 
 ### Files ###
 .coverage
+.DS_Store
 data/.env
 data/database.db
