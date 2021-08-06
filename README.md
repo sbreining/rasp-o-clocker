@@ -1,5 +1,3 @@
-<center>
-
 ```
   _____                        ____          _____ _            _             
  |  __ \                      / __ \        / ____| |          | |            
@@ -11,13 +9,10 @@
                  |_|                                                          
 ```
 
-
 [![Build Status](https://img.shields.io/travis/sbreining/rasp-o-clocker?label=Travis%20CI&style=plastic)](https://travis-ci.org/sbreining/rasp-o-clocker)
 [![Coverage Status](https://img.shields.io/coveralls/github/sbreining/rasp-o-clocker?label=Coverage&style=plastic)](https://coveralls.io/github/sbreining/rasp-o-clocker?branch=master)
 ![License Status](https://img.shields.io/github/license/sbreining/rasp-o-clocker?label=License&style=plastic)
 ![Language Status](https://img.shields.io/github/languages/top/sbreining/rasp-o-clocker?label=Python&style=plastic)
-
-</center>
 
 ### Introduction
 
