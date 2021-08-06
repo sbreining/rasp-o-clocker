@@ -1,9 +1,25 @@
-# Rasp-O-Clocker
+<center>
+
+```
+  _____                        ____          _____ _            _             
+ |  __ \                      / __ \        / ____| |          | |            
+ | |__) |__ _ ___ _ __ ______| |  | |______| |    | | ___   ___| | _____ _ __ 
+ |  _  // _` / __| '_ |______| |  | |______| |    | |/ _ \ / __| |/ / _ | '__|
+ | | \ | (_| \__ | |_) |     | |__| |      | |____| | (_) | (__|   |  __| |   
+ |_|  \_\__,_|___| .__/       \____/        \_____|_|\___/ \___|_|\_\___|_|   
+                 | |                                                          
+                 |_|                                                          
+```
+
 
 [![Build Status](https://img.shields.io/travis/sbreining/rasp-o-clocker?label=Travis%20CI&style=plastic)](https://travis-ci.org/sbreining/rasp-o-clocker)
 [![Coverage Status](https://img.shields.io/coveralls/github/sbreining/rasp-o-clocker?label=Coverage&style=plastic)](https://coveralls.io/github/sbreining/rasp-o-clocker?branch=master)
 ![License Status](https://img.shields.io/github/license/sbreining/rasp-o-clocker?label=License&style=plastic)
 ![Language Status](https://img.shields.io/github/languages/top/sbreining/rasp-o-clocker?label=Python&style=plastic)
+
+</center>
+
+### Introduction
 
 This project was started in an attempt to gain familiarity with different tools.
 The first was to expand my knowledge of, and practice using Python. Further, it
