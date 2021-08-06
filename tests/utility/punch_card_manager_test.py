@@ -125,7 +125,7 @@ def test_start_performs_clock_in(time, args):
         # Do nothing with the exception
         pass
 
-    pcm.perform_action.call_args[0] is 'Clock In'
+    pcm.perform_action.call_args[0] == 'Clock In'
     pcm.perform_action.assert_called_once()
     pcm.should_punch.assert_not_called()
     time.assert_called_once_with(60)
@@ -155,7 +155,7 @@ def test_start_performs_lunch_start(time, args):
         # Do nothing with the exception
         pass
 
-    pcm.perform_action.call_args[0] is 'Start Lunch'
+    pcm.perform_action.call_args[0] == 'Start Lunch'
     pcm.perform_action.assert_called_once()
     pcm.should_punch.assert_called_once()
     time.assert_called_once_with(60)
@@ -185,7 +185,7 @@ def test_start_performs_end_lunch(time, args):
         # Do nothing with the exception
         pass
 
-    pcm.perform_action.call_args[0] is 'End Lunch'
+    pcm.perform_action.call_args[0] == 'End Lunch'
     pcm.perform_action.assert_called_once()
     assert pcm.should_punch.call_count is 2
     time.assert_called_once_with(60)
@@ -215,7 +215,7 @@ def test_start_performs_clock_out(time, args):
         # Do nothing with the exception
         pass
 
-    pcm.perform_action.call_args[0] is 'Clock Out'
+    pcm.perform_action.call_args[0] == 'Clock Out'
     pcm.perform_action.assert_called_once()
     assert pcm.should_punch.call_count is 3
     time.assert_called_once_with(60)
